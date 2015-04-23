@@ -10,6 +10,7 @@
 
 void phoneWorker(void * phoneID){
 	int phone = (int)phoneID;
+	char data[MSG_SIZE];
 	CLI_Write("Starting Phone Task\n");
 	while(1){
 		while(!xSemaphoreTake(networking_sem, portMAX_DELAY));

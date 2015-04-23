@@ -37,6 +37,7 @@ void updateLights(void *pvParam){
 		//Update the lights using the philips hue
 		case 1:
 			while(!xSemaphoreTake(networking_sem, portMAX_DELAY));
+			numChange();
 			jsonPut();
 			xSemaphoreGive(networking_sem);
 			break;
@@ -47,6 +48,59 @@ void updateLights(void *pvParam){
 	}
 }
 
+int pow(int base, int exp){
+	int i, ret;
+	ret = 1;
+	for(i = 0; i < exp; i++){
+		ret = ret * base;
+	}
+	return ret;
+}
+//only supports bri atm
+int convertToNum(int index){
+	int i, ret;
+	ret = 0;
+	for(i = 0; i < lightsData[index].briSize; i++){
+		ret = ret + (lightsData[index].bri[i] - 48) * pow(10, lightsData[index].briSize - 1 - i);
+	}
+	return ret;
+}
+
+void convertFromNum(int index, int value){
+	int i;
+	if(value <= 0){
+		lightsData[index].bri[0] = '1';
+		lightsData[index].briSize = 1;
+		return;
+	}
+	if(value > 255){
+		lightsData[index].bri[0] = '2';
+		lightsData[index].bri[1] = '5';
+		lightsData[index].bri[2] = '5';
+		lightsData[index].briSize = 3;
+		return;
+	}
+	if(value / 100)
+		lightsData[index].briSize = 3;
+	else if(value /10)
+		lightsData[index].briSize = 2;
+	else
+		lightsData[index].briSize = 1;
+	for(i = 0; i < lightsData[index].briSize; i++){
+		lightsData[index].bri[i] = (value/pow(10, lightsData[index].briSize - 1 - i) % 10 + 48);
+	}
+}
+
+void numChange(){
+	int i;
+	for(i = 0; i < 3; i++){
+		if(lightsData[i].numChangeMode != -1){
+			convertFromNum(i, convertToNum(i) + lightsData[i].numChange);
+			lightsData[i].numChangeMode = -1;
+			lightsData[i].numChange = 0;
+		}
+	}
+}
 
 int connectToLights(){
 	SlSockAddrIn_t  Addr;

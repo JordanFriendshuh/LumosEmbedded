@@ -61,6 +61,7 @@
 #define KNOB_BLUE 		P1
 #define KNOB_GRN 		P0
 
+#define ENC_SCALE		2
 
 extern xSemaphoreHandle updateLight_sem;
 extern xSemaphoreHandle networking_sem;
@@ -86,14 +87,13 @@ typedef struct lightData{
 	int satSize;
 	char hue[6];
 	int hueSize;
+	int numChange;
+	int numChangeMode;
 } lightData;
 
 extern _u8 g_Status;
 extern _i16 Lights_ID;
 extern _i16 Server_ID;
-extern char header[HEADER_LEN];
 extern lightData lightsData[NUM_OF_LIGHTS];
-extern char data[MSG_SIZE];
-
 
 #endif /* DEFINES_H_ */

@@ -105,8 +105,6 @@ void vApplicationStackOverflowHook( xTaskHandle *pxTask, signed portCHAR *pcTask
  */
 static _i32 configureSimpleLinkToDefaultState();
 static _i32 establishConnectionWithAP();
-static _i32 initializeAppVariables();
-static void displayBanner();
 /*
  * STATIC FUNCTION DEFINITIONS -- End
  */
@@ -426,9 +424,6 @@ static _i32 configureSimpleLinkToDefaultState()
     retVal = sl_Stop(SL_STOP_TIMEOUT);
     ASSERT_ON_ERROR(retVal);
 
-    retVal = initializeAppVariables();
-    ASSERT_ON_ERROR(retVal);
-
     return retVal; /* Success */
 }
 
@@ -472,29 +467,6 @@ static _i32 establishConnectionWithAP()
 
     \return     0 on success, negative error-code on error
 */
-static _i32 initializeAppVariables()
-{
-    g_Status = 0;
-
-    return SUCCESS;
-}
-
-/*!
-    \brief This function displays the application's banner
-
-    \param      None
-
-    \return     None
-*/
-
-static void displayBanner()
-{
-    CLI_Write("\n\r\n\r");
-    CLI_Write(" TCP socket application - Version ");
-    CLI_Write(APPLICATION_VERSION);
-    CLI_Write("\n\r*******************************************************************************\n\r");
-}
-
 
 /*
  * Application's entry point
@@ -502,10 +474,8 @@ static void displayBanner()
 int main(int argc, char** argv)
 {
     _i32 retVal = -1;
-    int phone = -1;
-    int i, delay;
-    retVal = initializeAppVariables();
-    ASSERT_ON_ERROR(retVal);
+    int i;
+    g_Status = 0;
     vSemaphoreCreateBinary(updateLight_sem);
     /* Stop WDT and initialize the system-clock of the MCU
        These functions needs to be implemented in PAL */
@@ -519,7 +489,6 @@ int main(int argc, char** argv)
     /* Configure command line interface */
     CLI_Configure();
 
- //   displayBanner();
 
     /*
      * Following function configures the device to default state by cleaning
@@ -582,30 +551,15 @@ int main(int argc, char** argv)
 		//strCpy("30000", lightsData[i].hue, 5);
 		lightsData[i].hue[0] = '0';
 		lightsData[i].hueSize = 1;
+		lightsData[i].numChange = 0;
+		lightsData[i].numChangeMode = -1;
     }
     vSemaphoreCreateBinary(updateLight_sem);
     vSemaphoreCreateBinary(networking_sem);
-    xTaskCreate(updateLights, "Lights Manager", 1024, NULL, 2, NULL); //4096
+    xTaskCreate(updateLights, "Lights Manager", 1536, NULL, 2, NULL); //4096
     xTaskCreate(serverThread, "Server", 1024, NULL, 1, NULL);
     vTaskStartScheduler();
-/*
-    CLI_Write(" Starting Server \n\r");
-    TcpServerStart(110);
-    CLI_Write(" Server Up \n\r");
-    while(1){
-    	if(phone == -1){
-    		phoneConnect(&phone);
-    	}else{
-    		if(0 > getPhoneData(&phone, data, MSG_SIZE))
-    			continue;
-    		inputConvert(data);
-    		jsonPut();
-    		sendPhoneOk(&phone);
-    	}
-    }
-    //BsdTcpServer(110);
-    sl_Stop(SL_STOP_TIMEOUT);
-*/
+
     return 0;
 }
 

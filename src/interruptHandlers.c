@@ -9,91 +9,47 @@
 #include "inc/hw_timer.h"
 #include "inc/hw_memmap.h"
 #include "../headers/externals.h"
-
 int encoderFlag = 0;
+int encLeftCount;
+int encRightCount;
+int boolFlag = 1;
+int buttonBounce = 0;
 
 void gpioHandle(void){
 	int i;
-	static int flag = 1;
 	//Turn left?
 	if(HWREG(GPIO_PORTF_BASE + GPIO_O_RIS) & ENC_B){
-		if(flag){
-			for(i = 0; i < NUM_OF_LIGHTS; i++){
-				lightsData[i].current = 0;
-				//10's digit is the middle digit
-				if(lightsData[i].briSize == 3){
-					if(lightsData[i].bri[1] == '0'){
-						if(lightsData[i].bri[0] == '2'){
-							lightsData[i].bri[0] = '1';
-							lightsData[i].bri[1] = '9';
-						}else{
-							lightsData[i].bri[1] = lightsData[i].bri[2];
-							lightsData[i].bri[0] = '9';
-							lightsData[i].briSize = 2;
-						}
-					}else{
-						lightsData[i].bri[1] = lightsData[i].bri[1] - 1;
-					}
-				}else if(lightsData[i].briSize == 2){ //10's digit is the leading digit
-					if(lightsData[i].bri[0] == '1'){
-						lightsData[i].bri[0] = lightsData[i].bri[1];
-						lightsData[i].briSize = 1;
-					}else{
-						lightsData[i].bri[0] = lightsData[i].bri[0] - 1;
-					}
-				}
-			}
+		if(boolFlag){
+			encLeftCount++;
 			encoderFlag = 1;
 			//xSemaphoreGiveFromISR(updateLight_sem, 0);
-			flag = 0;
+			boolFlag = 0;
 		}else{
-			flag = 1;
+			boolFlag = 1;
 		}
 	}
 	if(HWREG(GPIO_PORTF_BASE + GPIO_O_RIS) & ENC_A){
-		if(flag){
-			for(i = 0; i < NUM_OF_LIGHTS; i++){
-				lightsData[i].current = 0;
-				if(lightsData[i].briSize == 3){
-					if(lightsData[i].bri[1] == '9'){
-						lightsData[i].bri[0] = lightsData[i].bri[0] + 1;
-						lightsData[i].bri[1] = '0';
-					}else{
-						if(!(lightsData[i].bri[0] == '2' && (lightsData[i].bri[1] == '4' || lightsData[i].bri[1] == '5'))){
-							lightsData[i].bri[1] = lightsData[i].bri[1] + 1;
-						}
-					}
-				}else if(lightsData[i].briSize == 2){
-					if(lightsData[i].bri[0] == '9'){
-						lightsData[i].bri[2] = lightsData[i].bri[1];
-						lightsData[i].bri[1] = '0';
-						lightsData[i].bri[0] = '1';
-						lightsData[i].briSize = 3;
-					}else{
-						lightsData[i].bri[0] = lightsData[i].bri[0] + 1;
-					}
-				}else{
-					lightsData[i].bri[1] = lightsData[i].bri[0];
-					lightsData[i].bri[0] = '1';
-					lightsData[i].briSize = 2;
-				}
-			}
+		if(boolFlag){
+			encRightCount++;
 			encoderFlag = 1;
 			//xSemaphoreGiveFromISR(updateLight_sem, 0);
-			flag = 0;
+			boolFlag = 0;
 		}else{
-			flag = 1;
+			boolFlag = 1;
 		}
 	}
 	if(HWREG(GPIO_PORTF_BASE + GPIO_O_RIS) & KNOB_PB){
-    	for(i = 0; i < NUM_OF_LIGHTS; i++){
-    		lightsData[i].current = 0;
-    		if(lightsData[i].on  == 1)
-    			lightsData[i].on = 0;
-    		else
-    			lightsData[i].on = 1;
+    	if(!buttonBounce){
+    		for(i = 0; i < NUM_OF_LIGHTS; i++){
+    			lightsData[i].current = 0;
+    			if(lightsData[i].on  == 1)
+    				lightsData[i].on = 0;
+    			else
+    				lightsData[i].on = 1;
+    		}
+    		buttonBounce = 1;
+    		xSemaphoreGiveFromISR(updateLight_sem, 0);
     	}
-    	xSemaphoreGiveFromISR(updateLight_sem, 0);
     	//portEND_SWITCHING_ISR();
 	}
 	HWREG(GPIO_PORTF_BASE + GPIO_O_ICR) |= (ENC_A | ENC_B | KNOB_PB);
@@ -107,9 +63,24 @@ void Timer0Handler()
 	static int mic_count = 0;
 //	//comes in here every 1 ms
 	mic_value = GetADCval(1)/41 + 1;
+	if(buttonBounce){
+		buttonBounce++;
+		if(buttonBounce > 20){
+			buttonBounce = 0;
+		}
+	}
 	if(encoderFlag){
-		if(encoderFlag == 100){
+		if(encoderFlag == 50){
 			encoderFlag = 0;
+			boolFlag = 1;
+			for(i = 0; i < NUM_OF_LIGHTS; i++){
+				lightsData[i].current = 0;
+				lightsData[i].numChangeMode = 0;
+				//10's digit is the middle digit
+				lightsData[i].numChange += (ENC_SCALE * encRightCount) + (encLeftCount * (-ENC_SCALE));
+			}
+			encRightCount = 0;
+			encLeftCount = 0;
 			xSemaphoreGiveFromISR(updateLight_sem, 0);
 		}else{
 			encoderFlag++;

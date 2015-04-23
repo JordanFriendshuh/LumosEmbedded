@@ -14,5 +14,6 @@ void updateLights(void *pvParam);
 int disconnectLights();
 int recvFromLights();
 void jsonPut();
+void numChange();
 int connectToLights();
 #endif /* LIGHTSMANAGER_H_ */
