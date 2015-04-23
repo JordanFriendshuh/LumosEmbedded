@@ -1,10 +1,8 @@
 //*****************************************************************************
 //
-// Startup code for use with TI's Code Composer Studio.
+// startup_ccs.c - Startup code for use with TI's Code Composer Studio.
 //
-// Copyright (c) 2011-2013 Texas Instruments Incorporated.  All rights reserved.
-// Software License Agreement
-// 
+// Copyright (c) 2006-2010 Texas Instruments Incorporated.  All rights reserved.
 // Software License Agreement
 //
 // Texas Instruments (TI) is supplying this software for use solely and
@@ -20,11 +18,10 @@
 // CIRCUMSTANCES, BE LIABLE FOR SPECIAL, INCIDENTAL, OR CONSEQUENTIAL
 // DAMAGES, FOR ANY REASON WHATSOEVER.
 //
+// This is part of revision 5570 of the EK-LM3S8962 Firmware Package.
+//
 //*****************************************************************************
-
-#include <stdint.h>
 #include "board.h"
-
 //*****************************************************************************
 //
 // Forward declaration of the default fault handlers.
@@ -48,14 +45,18 @@ extern void _c_int00(void);
 // Linker variable that marks the top of the stack.
 //
 //*****************************************************************************
-extern uint32_t __STACK_TOP;
+extern unsigned long __STACK_TOP;
 
 //*****************************************************************************
 //
 // External declarations for the interrupt handlers used by the application.
 //
 //*****************************************************************************
-// To be added by user
+extern void xPortPendSVHandler(void);
+extern void xPortSysTickHandler(void);
+extern void vPortSVCHandler( void );
+extern void gpioHandle(void);
+extern void Timer0Handler(void);
 
 //*****************************************************************************
 //
@@ -67,7 +68,7 @@ extern uint32_t __STACK_TOP;
 #pragma DATA_SECTION(g_pfnVectors, ".intvecs")
 void (* const g_pfnVectors[])(void) =
 {
-    (void (*)(void))((uint32_t)&__STACK_TOP),
+    (void (*)(void))((unsigned long)&__STACK_TOP),
                                             // The initial stack pointer
     ResetISR,                               // The reset handler
     NmiSR,                                  // The NMI handler
@@ -79,18 +80,18 @@ void (* const g_pfnVectors[])(void) =
     0,                                      // Reserved
     0,                                      // Reserved
     0,                                      // Reserved
-    IntDefaultHandler,                      // SVCall handler
+    vPortSVCHandler,                        // SVCall handler (System Service Call with SVC instruction)
     IntDefaultHandler,                      // Debug monitor handler
     0,                                      // Reserved
-    IntDefaultHandler,                      // The PendSV handler
-    IntDefaultHandler,                      // The SysTick handler
+    xPortPendSVHandler,                     // The PendSV handler (Pendable request for system service)
+    xPortSysTickHandler,                    // The SysTick handler
     IntDefaultHandler,                      // GPIO Port A
-    GPIOB_intHandler,                       // GPIO Port B
+    GPIOB_intHandler,                      // GPIO Port B
     IntDefaultHandler,                      // GPIO Port C
     IntDefaultHandler,                      // GPIO Port D
     IntDefaultHandler,                      // GPIO Port E
     IntDefaultHandler,                      // UART0 Rx and Tx
-    UART1_intHandler,                       // UART1 Rx and Tx
+    UART1_intHandler,                      // UART1 Rx and Tx
     IntDefaultHandler,                      // SSI0 Rx and Tx
     IntDefaultHandler,                      // I2C0 Master and Slave
     IntDefaultHandler,                      // PWM Fault
@@ -103,8 +104,8 @@ void (* const g_pfnVectors[])(void) =
     IntDefaultHandler,                      // ADC Sequence 2
     IntDefaultHandler,                      // ADC Sequence 3
     IntDefaultHandler,                      // Watchdog timer
-    IntDefaultHandler,                      // Timer 0 subtimer A
-    IntDefaultHandler,                      // Timer 0 subtimer B
+    Timer0Handler,                      // Timer 0 subtimer A
+    Timer0Handler,                      // Timer 0 subtimer B
     IntDefaultHandler,                      // Timer 1 subtimer A
     IntDefaultHandler,                      // Timer 1 subtimer B
     IntDefaultHandler,                      // Timer 2 subtimer A
@@ -114,7 +115,7 @@ void (* const g_pfnVectors[])(void) =
     IntDefaultHandler,                      // Analog Comparator 2
     IntDefaultHandler,                      // System Control (PLL, OSC, BO)
     IntDefaultHandler,                      // FLASH Control
-    IntDefaultHandler,                      // GPIO Port F
+    gpioHandle,                      // GPIO Port F
     IntDefaultHandler,                      // GPIO Port G
     IntDefaultHandler,                      // GPIO Port H
     IntDefaultHandler,                      // UART2 Rx and Tx
@@ -126,103 +127,8 @@ void (* const g_pfnVectors[])(void) =
     IntDefaultHandler,                      // CAN0
     IntDefaultHandler,                      // CAN1
     IntDefaultHandler,                      // CAN2
-    0,                                      // Reserved
-    IntDefaultHandler,                      // Hibernate
-    IntDefaultHandler,                      // USB0
-    IntDefaultHandler,                      // PWM Generator 3
-    IntDefaultHandler,                      // uDMA Software Transfer
-    IntDefaultHandler,                      // uDMA Error
-    IntDefaultHandler,                      // ADC1 Sequence 0
-    IntDefaultHandler,                      // ADC1 Sequence 1
-    IntDefaultHandler,                      // ADC1 Sequence 2
-    IntDefaultHandler,                      // ADC1 Sequence 3
-    0,                                      // Reserved
-    0,                                      // Reserved
-    IntDefaultHandler,                      // GPIO Port J
-    IntDefaultHandler,                      // GPIO Port K
-    IntDefaultHandler,                      // GPIO Port L
-    IntDefaultHandler,                      // SSI2 Rx and Tx
-    IntDefaultHandler,                      // SSI3 Rx and Tx
-    IntDefaultHandler,                      // UART3 Rx and Tx
-    IntDefaultHandler,                      // UART4 Rx and Tx
-    IntDefaultHandler,                      // UART5 Rx and Tx
-    IntDefaultHandler,                      // UART6 Rx and Tx
-    IntDefaultHandler,                      // UART7 Rx and Tx
-    0,                                      // Reserved
-    0,                                      // Reserved
-    0,                                      // Reserved
-    0,                                      // Reserved
-    IntDefaultHandler,                      // I2C2 Master and Slave
-    IntDefaultHandler,                      // I2C3 Master and Slave
-    IntDefaultHandler,                      // Timer 4 subtimer A
-    IntDefaultHandler,                      // Timer 4 subtimer B
-    0,                                      // Reserved
-    0,                                      // Reserved
-    0,                                      // Reserved
-    0,                                      // Reserved
-    0,                                      // Reserved
-    0,                                      // Reserved
-    0,                                      // Reserved
-    0,                                      // Reserved
-    0,                                      // Reserved
-    0,                                      // Reserved
-    0,                                      // Reserved
-    0,                                      // Reserved
-    0,                                      // Reserved
-    0,                                      // Reserved
-    0,                                      // Reserved
-    0,                                      // Reserved
-    0,                                      // Reserved
-    0,                                      // Reserved
-    0,                                      // Reserved
-    0,                                      // Reserved
-    IntDefaultHandler,                      // Timer 5 subtimer A
-    IntDefaultHandler,                      // Timer 5 subtimer B
-    IntDefaultHandler,                      // Wide Timer 0 subtimer A
-    IntDefaultHandler,                      // Wide Timer 0 subtimer B
-    IntDefaultHandler,                      // Wide Timer 1 subtimer A
-    IntDefaultHandler,                      // Wide Timer 1 subtimer B
-    IntDefaultHandler,                      // Wide Timer 2 subtimer A
-    IntDefaultHandler,                      // Wide Timer 2 subtimer B
-    IntDefaultHandler,                      // Wide Timer 3 subtimer A
-    IntDefaultHandler,                      // Wide Timer 3 subtimer B
-    IntDefaultHandler,                      // Wide Timer 4 subtimer A
-    IntDefaultHandler,                      // Wide Timer 4 subtimer B
-    IntDefaultHandler,                      // Wide Timer 5 subtimer A
-    IntDefaultHandler,                      // Wide Timer 5 subtimer B
-    IntDefaultHandler,                      // FPU
-    0,                                      // Reserved
-    0,                                      // Reserved
-    IntDefaultHandler,                      // I2C4 Master and Slave
-    IntDefaultHandler,                      // I2C5 Master and Slave
-    IntDefaultHandler,                      // GPIO Port M
-    IntDefaultHandler,                      // GPIO Port N
-    IntDefaultHandler,                      // Quadrature Encoder 2
-    0,                                      // Reserved
-    0,                                      // Reserved
-    IntDefaultHandler,                      // GPIO Port P (Summary or P0)
-    IntDefaultHandler,                      // GPIO Port P1
-    IntDefaultHandler,                      // GPIO Port P2
-    IntDefaultHandler,                      // GPIO Port P3
-    IntDefaultHandler,                      // GPIO Port P4
-    IntDefaultHandler,                      // GPIO Port P5
-    IntDefaultHandler,                      // GPIO Port P6
-    IntDefaultHandler,                      // GPIO Port P7
-    IntDefaultHandler,                      // GPIO Port Q (Summary or Q0)
-    IntDefaultHandler,                      // GPIO Port Q1
-    IntDefaultHandler,                      // GPIO Port Q2
-    IntDefaultHandler,                      // GPIO Port Q3
-    IntDefaultHandler,                      // GPIO Port Q4
-    IntDefaultHandler,                      // GPIO Port Q5
-    IntDefaultHandler,                      // GPIO Port Q6
-    IntDefaultHandler,                      // GPIO Port Q7
-    IntDefaultHandler,                      // GPIO Port R
-    IntDefaultHandler,                      // GPIO Port S
-    IntDefaultHandler,                      // PWM 1 Generator 0
-    IntDefaultHandler,                      // PWM 1 Generator 1
-    IntDefaultHandler,                      // PWM 1 Generator 2
-    IntDefaultHandler,                      // PWM 1 Generator 3
-    IntDefaultHandler                       // PWM 1 Fault
+    IntDefaultHandler,                      // Ethernet
+    IntDefaultHandler                       // Hibernate
 };
 
 //*****************************************************************************
@@ -239,8 +145,7 @@ void
 ResetISR(void)
 {
     //
-    // Jump to the CCS C initialization routine.  This will enable the
-    // floating-point unit as well, so that does not need to be done here.
+    // Jump to the CCS C Initialization Routine.
     //
     __asm("    .global _c_int00\n"
           "    b.w     _c_int00");
@@ -299,3 +204,17 @@ IntDefaultHandler(void)
     {
     }
 }
+
+#if (0)
+//*****************************************************************************
+//
+// A dummy printf function to satisfy the calls to printf from uip.  This
+// avoids pulling in the run-time library.
+//
+//*****************************************************************************
+int
+uipprintf(const char *fmt, ...)
+{
+    return(0);
+}
+#endif

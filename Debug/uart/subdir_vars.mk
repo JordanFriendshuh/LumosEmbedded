@@ -4,7 +4,7 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
-C:/ti/CC3100SDK_1.0.0/cc3100-sdk/platform/tiva-c-launchpad/uart.c 
+../uart/uart.c 
 
 OBJS += \
 ./uart/uart.obj 
@@ -19,6 +19,6 @@ OBJS__QUOTED += \
 "uart\uart.obj" 
 
 C_SRCS__QUOTED += \
-"C:/ti/CC3100SDK_1.0.0/cc3100-sdk/platform/tiva-c-launchpad/uart.c" 
+"../uart/uart.c" 
 
 

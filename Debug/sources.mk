@@ -104,8 +104,12 @@ S64_DEPS__QUOTED :=
 SUBDIRS := \
 . \
 uart \
+src \
 spi \
 simplelink/source \
 cli_uart \
 board \
+FreeRTOS/Source \
+FreeRTOS/Source/portable/MemMang \
+FreeRTOS/Source/portable/CCS4/ARM_CM3 \
 

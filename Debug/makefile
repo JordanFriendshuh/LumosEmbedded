@@ -8,9 +8,17 @@ CG_TOOL_ROOT := c:/ti/ccsv6/tools/compiler/arm_5.1.6
 
 ORDERED_OBJS += \
 $(GEN_CMDS__FLAG) \
-"./main.obj" \
-"./tm4c123gh6pm_startup_ccs.obj" \
 "./uart/uart.obj" \
+"./src/externals.obj" \
+"./src/gpio.obj" \
+"./src/i2c.obj" \
+"./src/interruptHandlers.obj" \
+"./src/lightsManager.obj" \
+"./src/main.obj" \
+"./src/phone.obj" \
+"./src/server.obj" \
+"./src/startup_ccs.obj" \
+"./src/wrapper.obj" \
 "./spi/spi.obj" \
 "./simplelink/source/device.obj" \
 "./simplelink/source/driver.obj" \
@@ -24,6 +32,13 @@ $(GEN_CMDS__FLAG) \
 "./simplelink/source/wlan.obj" \
 "./cli_uart/cli_uart.obj" \
 "./board/board.obj" \
+"./FreeRTOS/Source/croutine.obj" \
+"./FreeRTOS/Source/list.obj" \
+"./FreeRTOS/Source/queue.obj" \
+"./FreeRTOS/Source/tasks.obj" \
+"./FreeRTOS/Source/portable/MemMang/heap_4.obj" \
+"./FreeRTOS/Source/portable/CCS4/ARM_CM3/port.obj" \
+"./FreeRTOS/Source/portable/CCS4/ARM_CM3/portasm.obj" \
 "../tm4c123gh6pm.cmd" \
 -l"libc.a" \
 -lC:/ti/TivaWare_C_Series-2.1.0.12573\driverlib\ccs\Debug\driverlib.lib \
@@ -37,16 +52,24 @@ RMDIR := RMDIR /S/Q
 -include sources.mk
 -include subdir_vars.mk
 -include uart/subdir_vars.mk
+-include src/subdir_vars.mk
 -include spi/subdir_vars.mk
 -include simplelink/source/subdir_vars.mk
 -include cli_uart/subdir_vars.mk
 -include board/subdir_vars.mk
+-include FreeRTOS/Source/subdir_vars.mk
+-include FreeRTOS/Source/portable/MemMang/subdir_vars.mk
+-include FreeRTOS/Source/portable/CCS4/ARM_CM3/subdir_vars.mk
 -include subdir_rules.mk
 -include uart/subdir_rules.mk
+-include src/subdir_rules.mk
 -include spi/subdir_rules.mk
 -include simplelink/source/subdir_rules.mk
 -include cli_uart/subdir_rules.mk
 -include board/subdir_rules.mk
+-include FreeRTOS/Source/subdir_rules.mk
+-include FreeRTOS/Source/portable/MemMang/subdir_rules.mk
+-include FreeRTOS/Source/portable/CCS4/ARM_CM3/subdir_rules.mk
 -include objects.mk
 
 ifneq ($(MAKECMDGOALS),clean)
@@ -166,8 +189,9 @@ getting_started_with_wlan_station.hex: $(EXE_OUTPUTS)
 # Other Targets
 clean:
 	-$(RM) $(EXE_OUTPUTS__QUOTED)$(BIN_OUTPUTS__QUOTED)
-	-$(RM) "main.pp" "tm4c123gh6pm_startup_ccs.pp" "uart\uart.pp" "spi\spi.pp" "simplelink\source\device.pp" "simplelink\source\driver.pp" "simplelink\source\flowcont.pp" "simplelink\source\fs.pp" "simplelink\source\netapp.pp" "simplelink\source\netcfg.pp" "simplelink\source\nonos.pp" "simplelink\source\socket.pp" "simplelink\source\spawn.pp" "simplelink\source\wlan.pp" "cli_uart\cli_uart.pp" "board\board.pp" 
-	-$(RM) "main.obj" "tm4c123gh6pm_startup_ccs.obj" "uart\uart.obj" "spi\spi.obj" "simplelink\source\device.obj" "simplelink\source\driver.obj" "simplelink\source\flowcont.obj" "simplelink\source\fs.obj" "simplelink\source\netapp.obj" "simplelink\source\netcfg.obj" "simplelink\source\nonos.obj" "simplelink\source\socket.obj" "simplelink\source\spawn.obj" "simplelink\source\wlan.obj" "cli_uart\cli_uart.obj" "board\board.obj" 
+	-$(RM) "uart\uart.pp" "src\externals.pp" "src\gpio.pp" "src\i2c.pp" "src\interruptHandlers.pp" "src\lightsManager.pp" "src\main.pp" "src\phone.pp" "src\server.pp" "src\startup_ccs.pp" "src\wrapper.pp" "spi\spi.pp" "simplelink\source\device.pp" "simplelink\source\driver.pp" "simplelink\source\flowcont.pp" "simplelink\source\fs.pp" "simplelink\source\netapp.pp" "simplelink\source\netcfg.pp" "simplelink\source\nonos.pp" "simplelink\source\socket.pp" "simplelink\source\spawn.pp" "simplelink\source\wlan.pp" "cli_uart\cli_uart.pp" "board\board.pp" "FreeRTOS\Source\croutine.pp" "FreeRTOS\Source\list.pp" "FreeRTOS\Source\queue.pp" "FreeRTOS\Source\tasks.pp" "FreeRTOS\Source\portable\MemMang\heap_4.pp" "FreeRTOS\Source\portable\CCS4\ARM_CM3\port.pp" 
+	-$(RM) "uart\uart.obj" "src\externals.obj" "src\gpio.obj" "src\i2c.obj" "src\interruptHandlers.obj" "src\lightsManager.obj" "src\main.obj" "src\phone.obj" "src\server.obj" "src\startup_ccs.obj" "src\wrapper.obj" "spi\spi.obj" "simplelink\source\device.obj" "simplelink\source\driver.obj" "simplelink\source\flowcont.obj" "simplelink\source\fs.obj" "simplelink\source\netapp.obj" "simplelink\source\netcfg.obj" "simplelink\source\nonos.obj" "simplelink\source\socket.obj" "simplelink\source\spawn.obj" "simplelink\source\wlan.obj" "cli_uart\cli_uart.obj" "board\board.obj" "FreeRTOS\Source\croutine.obj" "FreeRTOS\Source\list.obj" "FreeRTOS\Source\queue.obj" "FreeRTOS\Source\tasks.obj" "FreeRTOS\Source\portable\MemMang\heap_4.obj" "FreeRTOS\Source\portable\CCS4\ARM_CM3\port.obj" "FreeRTOS\Source\portable\CCS4\ARM_CM3\portasm.obj" 
+	-$(RM) "FreeRTOS\Source\portable\CCS4\ARM_CM3\portasm.pp" 
 	-@echo 'Finished clean'
 	-@echo ' '
 

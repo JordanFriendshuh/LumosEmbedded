@@ -1,6 +1,6 @@
 # FIXED
 
-simplelink/source/spawn.obj: C:/ti/CC3100SDK_1.0.0/cc3100-sdk/simplelink/source/spawn.c
+simplelink/source/spawn.obj: ../simplelink/source/spawn.c
 simplelink/source/spawn.obj: C:/ti/CC3100SDK_1.0.0/cc3100-sdk/simplelink/include/simplelink.h
 simplelink/source/spawn.obj: C:/ti/CC3100SDK_1.0.0/cc3100-sdk/platform/tiva-c-launchpad/user.h
 simplelink/source/spawn.obj: c:/ti/ccsv6/tools/compiler/arm_5.1.6/include/string.h
@@ -20,7 +20,7 @@ simplelink/source/spawn.obj: C:/ti/CC3100SDK_1.0.0/cc3100-sdk/simplelink/include
 simplelink/source/spawn.obj: C:/ti/CC3100SDK_1.0.0/cc3100-sdk/simplelink/include/netcfg.h
 simplelink/source/spawn.obj: C:/ti/CC3100SDK_1.0.0/cc3100-sdk/simplelink/include/wlan_rx_filters.h
 
-C:/ti/CC3100SDK_1.0.0/cc3100-sdk/simplelink/source/spawn.c: 
+../simplelink/source/spawn.c: 
 C:/ti/CC3100SDK_1.0.0/cc3100-sdk/simplelink/include/simplelink.h: 
 C:/ti/CC3100SDK_1.0.0/cc3100-sdk/platform/tiva-c-launchpad/user.h: 
 c:/ti/ccsv6/tools/compiler/arm_5.1.6/include/string.h: 

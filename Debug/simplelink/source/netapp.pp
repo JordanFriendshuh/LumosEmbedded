@@ -1,6 +1,6 @@
 # FIXED
 
-simplelink/source/netapp.obj: C:/ti/CC3100SDK_1.0.0/cc3100-sdk/simplelink/source/netapp.c
+simplelink/source/netapp.obj: ../simplelink/source/netapp.c
 simplelink/source/netapp.obj: C:/ti/CC3100SDK_1.0.0/cc3100-sdk/simplelink/include/simplelink.h
 simplelink/source/netapp.obj: C:/ti/CC3100SDK_1.0.0/cc3100-sdk/platform/tiva-c-launchpad/user.h
 simplelink/source/netapp.obj: c:/ti/ccsv6/tools/compiler/arm_5.1.6/include/string.h
@@ -19,10 +19,10 @@ simplelink/source/netapp.obj: C:/ti/CC3100SDK_1.0.0/cc3100-sdk/simplelink/includ
 simplelink/source/netapp.obj: C:/ti/CC3100SDK_1.0.0/cc3100-sdk/simplelink/include/device.h
 simplelink/source/netapp.obj: C:/ti/CC3100SDK_1.0.0/cc3100-sdk/simplelink/include/netcfg.h
 simplelink/source/netapp.obj: C:/ti/CC3100SDK_1.0.0/cc3100-sdk/simplelink/include/wlan_rx_filters.h
-simplelink/source/netapp.obj: C:/ti/CC3100SDK_1.0.0/cc3100-sdk/simplelink/source/protocol.h
-simplelink/source/netapp.obj: C:/ti/CC3100SDK_1.0.0/cc3100-sdk/simplelink/source/driver.h
+simplelink/source/netapp.obj: ../simplelink/source/protocol.h
+simplelink/source/netapp.obj: ../simplelink/source/driver.h
 
-C:/ti/CC3100SDK_1.0.0/cc3100-sdk/simplelink/source/netapp.c: 
+../simplelink/source/netapp.c: 
 C:/ti/CC3100SDK_1.0.0/cc3100-sdk/simplelink/include/simplelink.h: 
 C:/ti/CC3100SDK_1.0.0/cc3100-sdk/platform/tiva-c-launchpad/user.h: 
 c:/ti/ccsv6/tools/compiler/arm_5.1.6/include/string.h: 
@@ -41,5 +41,5 @@ C:/ti/CC3100SDK_1.0.0/cc3100-sdk/simplelink/include/wlan.h:
 C:/ti/CC3100SDK_1.0.0/cc3100-sdk/simplelink/include/device.h: 
 C:/ti/CC3100SDK_1.0.0/cc3100-sdk/simplelink/include/netcfg.h: 
 C:/ti/CC3100SDK_1.0.0/cc3100-sdk/simplelink/include/wlan_rx_filters.h: 
-C:/ti/CC3100SDK_1.0.0/cc3100-sdk/simplelink/source/protocol.h: 
-C:/ti/CC3100SDK_1.0.0/cc3100-sdk/simplelink/source/driver.h: 
+../simplelink/source/protocol.h: 
+../simplelink/source/driver.h: 

@@ -1,6 +1,6 @@
 # FIXED
 
-board/board.obj: C:/ti/CC3100SDK_1.0.0/cc3100-sdk/platform/tiva-c-launchpad/board.c
+board/board.obj: ../board/board.c
 board/board.obj: C:/ti/CC3100SDK_1.0.0/cc3100-sdk/simplelink/include/simplelink.h
 board/board.obj: C:/ti/CC3100SDK_1.0.0/cc3100-sdk/platform/tiva-c-launchpad/user.h
 board/board.obj: c:/ti/ccsv6/tools/compiler/arm_5.1.6/include/string.h
@@ -29,8 +29,9 @@ board/board.obj: C:/ti/TivaWare_C_Series-2.1.0.12573/driverlib/gpio.h
 board/board.obj: C:/ti/TivaWare_C_Series-2.1.0.12573/driverlib/sysctl.h
 board/board.obj: C:/ti/TivaWare_C_Series-2.1.0.12573/driverlib/fpu.h
 board/board.obj: C:/ti/TivaWare_C_Series-2.1.0.12573/driverlib/uart.h
+board/board.obj: ../board/board.h
 
-C:/ti/CC3100SDK_1.0.0/cc3100-sdk/platform/tiva-c-launchpad/board.c: 
+../board/board.c: 
 C:/ti/CC3100SDK_1.0.0/cc3100-sdk/simplelink/include/simplelink.h: 
 C:/ti/CC3100SDK_1.0.0/cc3100-sdk/platform/tiva-c-launchpad/user.h: 
 c:/ti/ccsv6/tools/compiler/arm_5.1.6/include/string.h: 
@@ -59,3 +60,4 @@ C:/ti/TivaWare_C_Series-2.1.0.12573/driverlib/gpio.h:
 C:/ti/TivaWare_C_Series-2.1.0.12573/driverlib/sysctl.h: 
 C:/ti/TivaWare_C_Series-2.1.0.12573/driverlib/fpu.h: 
 C:/ti/TivaWare_C_Series-2.1.0.12573/driverlib/uart.h: 
+../board/board.h: 
