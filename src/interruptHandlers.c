@@ -10,9 +10,7 @@
 #include "inc/hw_memmap.h"
 #include "../headers/externals.h"
 
- bool mic_flag;
-
-
+int encoderFlag = 0;
 
 void gpioHandle(void){
 	int i;
@@ -22,44 +20,72 @@ void gpioHandle(void){
 		if(flag){
 			for(i = 0; i < NUM_OF_LIGHTS; i++){
 				lightsData[i].current = 0;
-				if(lightsData[i].bri[1] == '0'){
-					if(lightsData[i].bri[0] != '0'){
-						lightsData[i].bri[0] = lightsData[i].bri[0] - 1;
-						lightsData[i].bri[1] = '9';
+				//10's digit is the middle digit
+				if(lightsData[i].briSize == 3){
+					if(lightsData[i].bri[1] == '0'){
+						if(lightsData[i].bri[0] == '2'){
+							lightsData[i].bri[0] = '1';
+							lightsData[i].bri[1] = '9';
+						}else{
+							lightsData[i].bri[1] = lightsData[i].bri[2];
+							lightsData[i].bri[0] = '9';
+							lightsData[i].briSize = 2;
+						}
+					}else{
+						lightsData[i].bri[1] = lightsData[i].bri[1] - 1;
 					}
-				}else{
-					lightsData[i].bri[1] = lightsData[i].bri[1] - 1;
+				}else if(lightsData[i].briSize == 2){ //10's digit is the leading digit
+					if(lightsData[i].bri[0] == '1'){
+						lightsData[i].bri[0] = lightsData[i].bri[1];
+						lightsData[i].briSize = 1;
+					}else{
+						lightsData[i].bri[0] = lightsData[i].bri[0] - 1;
+					}
 				}
 			}
-			xSemaphoreGiveFromISR(updateLight_sem, 0);
+			encoderFlag = 1;
+			//xSemaphoreGiveFromISR(updateLight_sem, 0);
 			flag = 0;
 		}else{
 			flag = 1;
 		}
-
 	}
-	//Turn right?
 	if(HWREG(GPIO_PORTF_BASE + GPIO_O_RIS) & ENC_A){
 		if(flag){
 			for(i = 0; i < NUM_OF_LIGHTS; i++){
 				lightsData[i].current = 0;
-				if(lightsData[i].bri[1] == '9'){
-					lightsData[i].bri[0] = lightsData[i].bri[0] + 1;
-					lightsData[i].bri[1] = '0';
-				}else{
-					if(!(lightsData[i].bri[0] == '2' && (lightsData[i].bri[1] == '4' || lightsData[i].bri[1] == '5'))){
-						lightsData[i].bri[1] = lightsData[i].bri[1] + 1;
+				if(lightsData[i].briSize == 3){
+					if(lightsData[i].bri[1] == '9'){
+						lightsData[i].bri[0] = lightsData[i].bri[0] + 1;
+						lightsData[i].bri[1] = '0';
+					}else{
+						if(!(lightsData[i].bri[0] == '2' && (lightsData[i].bri[1] == '4' || lightsData[i].bri[1] == '5'))){
+							lightsData[i].bri[1] = lightsData[i].bri[1] + 1;
+						}
 					}
+				}else if(lightsData[i].briSize == 2){
+					if(lightsData[i].bri[0] == '9'){
+						lightsData[i].bri[2] = lightsData[i].bri[1];
+						lightsData[i].bri[1] = '0';
+						lightsData[i].bri[0] = '1';
+						lightsData[i].briSize = 3;
+					}else{
+						lightsData[i].bri[0] = lightsData[i].bri[0] + 1;
+					}
+				}else{
+					lightsData[i].bri[1] = lightsData[i].bri[0];
+					lightsData[i].bri[0] = '1';
+					lightsData[i].briSize = 2;
 				}
 			}
-			xSemaphoreGiveFromISR(updateLight_sem, 0);
+			encoderFlag = 1;
+			//xSemaphoreGiveFromISR(updateLight_sem, 0);
 			flag = 0;
 		}else{
 			flag = 1;
 		}
 	}
-
-    if(HWREG(GPIO_PORTF_BASE + GPIO_O_RIS) & KNOB_PB){
+	if(HWREG(GPIO_PORTF_BASE + GPIO_O_RIS) & KNOB_PB){
     	for(i = 0; i < NUM_OF_LIGHTS; i++){
     		lightsData[i].current = 0;
     		if(lightsData[i].on  == 1)
@@ -77,11 +103,18 @@ void gpioHandle(void){
 void Timer0Handler()
 {
 	int i, mic_value;
-	static mic_flag = 0;
-	static mic_count = 0;
+	static int mic_flag = 0;
+	static int mic_count = 0;
 //	//comes in here every 1 ms
 	mic_value = GetADCval(1)/41 + 1;
-
+	if(encoderFlag){
+		if(encoderFlag == 100){
+			encoderFlag = 0;
+			xSemaphoreGiveFromISR(updateLight_sem, 0);
+		}else{
+			encoderFlag++;
+		}
+	}
 	if(mic_flag == 0){
 		if(mic_value > 80){
 			for(i = 0; i < NUM_OF_LIGHTS; i++){

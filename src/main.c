@@ -571,13 +571,13 @@ int main(int argc, char** argv)
 
     CLI_Write(" Connection established w/ AP and IP is acquired \n\r");
     //init default light values
-    lightsMode = 0;
+    lightsMode = 1;
     for(i = 0; i < 3; i++){
 		lightsData[i].on = 0;
 		lightsData[i].current = 1;
 		strCpy("150", lightsData[i].sat, 3);
 		lightsData[i].satSize = 3;
-		strCpy("200", lightsData[i].bri, 3);
+		strCpy("100", lightsData[i].bri, 3);
 		lightsData[i].briSize = 3;
 		//strCpy("30000", lightsData[i].hue, 5);
 		lightsData[i].hue[0] = '0';

@@ -37,7 +37,7 @@ void lumosGpioConfig(){
 //	portStruct->IEV &= ~(P2|P3|P4);
 //	portStruct->IEV |= (P2|P3|P4);
 //	portStruct->IM |= (P2|P3|P4);
-	HWREG(NVIC_PRI4) = (HWREG(NVIC_PRI4) & 0x0FFFFFFF) | 0x40000000; //Priority 2
+	HWREG(NVIC_PRI4) = (HWREG(NVIC_PRI4) & 0x0FFFFFFF) | 0x20000000; //Priority 1
 	HWREG(NVIC_EN0) |= NVIC_EN0_INT30;
 }
 

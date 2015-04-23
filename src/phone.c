@@ -33,7 +33,7 @@ void phoneWorker(void * phoneID){
 
 static int inputDigitCounter(char * rawData, int start){
 	int i = start;
-	for(i = start; i < MSG_SIZE && (rawData[i] >= 48 && rawData[i] < 58); i++);
+	for(i = start; i < MSG_SIZE && (rawData[i] >= '0' && rawData[i] <= '9'); i++);
 	return i - start;
 }
 void inputConvert(char * rawData){
