@@ -84,6 +84,8 @@ extern "C" {
 #define uint16_t        _u16
 #define int16_t         _i16
 #define bool            _u8
+#define true			1
+#define false			0
 
 typedef P_EVENT_HANDLER                         SL_P_EVENT_HANDLER;
 

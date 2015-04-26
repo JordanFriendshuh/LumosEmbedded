@@ -6,10 +6,15 @@
  */
 #include "../headers/defines.h"
 #include "inc/hw_nvic.h"
+#include "driverlib/sysctl.h"
+#include "driverlib/gpio.h"
+#include "driverlib/pwm.h"
+#include "driverlib/pin_map.h"
 //#include "inc/tm4c123gh6pm.h"
 #include "../headers/lm4f120h5qr.h"
 
 volatile uint16_t scaled_adc0_right = 0;
+#define PWM_PERIOD 0x103
 
 void lumosGpioConfig(){
 
@@ -163,3 +168,15 @@ uint32_t GetADCval(uint32_t Channel)
 }
 
 //*****************************************************************************
+
+void pwmInit(){
+	SysCtlPeripheralEnable(GPIO_PORTA_BASE);
+	SysCtlPeripheralEnable(SYSCTL_PERIPH_PWM1);
+	GPIOPinConfigure(GPIO_PA6_M1PWM2);
+	GPIOPinTypePWM(GPIO_PORTA_BASE, GPIO_PIN_6);
+	PWMGenConfigure(PWM1_BASE, PWM_GEN_1, PWM_GEN_MODE_DOWN | PWM_GEN_MODE_NO_SYNC);
+	PWMGenPeriodSet(PWM1_BASE, PWM_GEN_1, PWM_PERIOD);
+	PWMPulseWidthSet(PWM1_BASE, PWM_OUT_2, PWM_PERIOD /2); //50% duty
+	PWMGenEnable(PWM1_BASE, PWM_GEN_1);
+	PWMOutputState(PWM1_BASE, PWM_OUT_2_BIT, 1);
+}

@@ -14,11 +14,11 @@ static bool verifyBaseAddr(uint32_t baseAddr)
      case GPIO_PORTE_BASE:
      case GPIO_PORTF_BASE:
      {
-       return true;
+       return 1;
      }
      default:
      {
-       return false;
+       return 0;
      }
    }
 }
@@ -117,7 +117,7 @@ bool  gpio_enable_port(uint32_t baseAddr)
      }
      default:
      {
-       return false;
+       return 0;
      }
    }
    
@@ -149,7 +149,7 @@ bool  gpio_enable_port(uint32_t baseAddr)
      GPIO_PORTF_CR_R = 0xFF;
   }
   
-  return true;
+  return 1;
 }
 
 //*****************************************************************************
@@ -170,9 +170,9 @@ bool  gpio_config_digital_enable(uint32_t baseAddr, uint8_t pins)
   // ADD CODE
   // Verify that the base address is a valid GPIO base address
   // using the verifyBaseAddr function provided above
-  if( verifyBaseAddr(baseAddr) == false)
+  if( verifyBaseAddr(baseAddr) == 0)
     {
-      return false;
+      return 0;
     }
   
   // ADD CODE
@@ -183,7 +183,7 @@ bool  gpio_config_digital_enable(uint32_t baseAddr, uint8_t pins)
   // Turn on the digital enable
   HWREG(baseAddr + GPIO_O_DEN) |= pins;
     
-  return true;
+  return 1;
 }
 
 //*****************************************************************************
@@ -203,9 +203,9 @@ bool  gpio_config_enable_output(uint32_t baseAddr, uint8_t pins)
   // ADD CODE
   // Verify that the base address is a valid GPIO base address
   // using the verifyBaseAddr function provided above
-  if( verifyBaseAddr(baseAddr) == false)
+  if( verifyBaseAddr(baseAddr) == 0)
     {
-      return false;
+      return 0;
     }
     
   // ADD CODE
@@ -216,7 +216,7 @@ bool  gpio_config_enable_output(uint32_t baseAddr, uint8_t pins)
   // Set the pins as outputs
   HWREG(baseAddr + GPIO_O_DIR) |= pins;
   //gpioPort->DIR |= pins;
-  return true;
+  return 1;
 }
 
 //*****************************************************************************
@@ -239,9 +239,9 @@ bool  gpio_config_enable_input(uint32_t baseAddr, uint8_t pins)
   // Verify that the base address is a valid GPIO base address
   // using the verifyBaseAddr function provided above
   
-  if( verifyBaseAddr(baseAddr) == false)
+  if( verifyBaseAddr(baseAddr) == 0)
     {
-      return false;
+      return 0;
     }
 
   // ADD CODE
@@ -252,7 +252,7 @@ bool  gpio_config_enable_input(uint32_t baseAddr, uint8_t pins)
   // Set the pins as inputs
   HWREG(baseAddr + GPIO_O_DIR) &= ~pins;
   //gpioPort->DIR &= ~pins;
-  return true;
+  return 1;
 }
 
 
@@ -271,9 +271,9 @@ bool  gpio_config_enable_pullup(uint32_t baseAddr, uint8_t pins)
   // ADD CODE
   // Verify that the base address is a valid GPIO base address
   // using the verifyBaseAddr function provided above
-  if( verifyBaseAddr(baseAddr) == false)
+  if( verifyBaseAddr(baseAddr) == 0)
     {
-      return false;
+      return 0;
     }
 
     // ADD CODE
@@ -284,7 +284,7 @@ bool  gpio_config_enable_pullup(uint32_t baseAddr, uint8_t pins)
   // Enable the pull-up resistors
   HWREG(baseAddr + GPIO_O_PUR) |= pins;
  // gpioPort->PUR |= pins;
-  return true;
+  return 1;
 }
 
 //*****************************************************************************
@@ -302,9 +302,9 @@ bool  gpio_config_enable_pulldown(uint32_t baseAddr, uint8_t pins)
   // ADD CODE
   // Verify that the base address is a valid GPIO base address
   // using the verifyBaseAddr function provided above
-  if( verifyBaseAddr(baseAddr) == false)
+  if( verifyBaseAddr(baseAddr) == 0)
     {
-      return false;
+      return 0;
     }
     
   // ADD CODE
@@ -315,7 +315,7 @@ bool  gpio_config_enable_pulldown(uint32_t baseAddr, uint8_t pins)
   // Enable the pull-down resistors
   HWREG(baseAddr + GPIO_O_PDR) |= pins;
   //gpioPort->PDR |= pins;
-  return true;
+  return 1;
 }
 
 
@@ -327,9 +327,9 @@ bool  gpio_config_analog_enable(uint32_t baseAddr, uint8_t pins)
   // ADD CODE
   // Verify that the base address is a valid GPIO base address
   // using the verifyBaseAddr function provided above
-  if( verifyBaseAddr(baseAddr) == false)
+  if( verifyBaseAddr(baseAddr) == 0)
     {
-      return false;
+      return 0;
     }
     
   // ADD CODE
@@ -340,7 +340,7 @@ bool  gpio_config_analog_enable(uint32_t baseAddr, uint8_t pins)
   // Enable analog pins
   HWREG(baseAddr + GPIO_O_AMSEL) |= pins;
  // gpioPort->AMSEL |= pins;
-  return true;
+  return 1;
 }
 
 //*****************************************************************************
@@ -351,9 +351,9 @@ bool  gpio_config_alternate_function(uint32_t baseAddr, uint8_t pins)
   // ADD CODE
   // Verify that the base address is a valid GPIO base address
   // using the verifyBaseAddr function provided above
-  if( verifyBaseAddr(baseAddr) == false)
+  if( verifyBaseAddr(baseAddr) == 0)
     {
-      return false;
+      return 0;
     }
     
   // ADD CODE
@@ -365,7 +365,7 @@ bool  gpio_config_alternate_function(uint32_t baseAddr, uint8_t pins)
   HWREG(baseAddr + GPIO_O_AFSEL) |= pins;
   //gpioPort->AFSEL |= pins;
     
-  return true;
+  return 1;
 }
 
 
@@ -377,9 +377,9 @@ bool  gpio_config_port_control(uint32_t baseAddr, uint32_t pins)
   // ADD CODE
   // Verify that the base address is a valid GPIO base address
   // using the verifyBaseAddr function provided above
-  if( verifyBaseAddr(baseAddr) == false)
+  if( verifyBaseAddr(baseAddr) == 0)
     {
-      return false;
+      return 0;
     }
     
   // ADD CODE
@@ -391,7 +391,7 @@ bool  gpio_config_port_control(uint32_t baseAddr, uint32_t pins)
   HWREG(baseAddr + GPIO_O_PCTL) |= pins;
   //gpioPort->PCTL |= pins;
     
-  return true;
+  return 1;
 }
 
 /******************************************************************************
@@ -404,9 +404,9 @@ bool  gpio_config_open_drain(uint32_t gpioBase, uint8_t pins)
 
   // Verify that the base address is a valid GPIO base address
   // using the verifyBaseAddr function provided above
-  if( verifyBaseAddr(gpioBase) == false)
+  if( verifyBaseAddr(gpioBase) == 0)
     {
-      return false;
+      return 0;
     }
     
   // Type Cast the base address to a GPIOA_Type pointer
@@ -416,6 +416,6 @@ bool  gpio_config_open_drain(uint32_t gpioBase, uint8_t pins)
   HWREG(gpioBase + GPIO_O_ODR) |= pins;
  // gpioPort->ODR |= pins;
     
-  return true;
+  return 1;
 
 }

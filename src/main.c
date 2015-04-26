@@ -485,6 +485,7 @@ int main(int argc, char** argv)
     initializeTimer0(80000);
     initializeADC();
     lumosGpioConfig();
+    pwmInit();
 
     /* Configure command line interface */
     CLI_Configure();

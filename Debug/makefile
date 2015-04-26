@@ -157,32 +157,32 @@ endif
 
 # Add inputs and outputs from these tool invocations to the build variables 
 EXE_OUTPUTS += \
-getting_started_with_wlan_station.out \
+lumosembedded.out \
 
 EXE_OUTPUTS__QUOTED += \
-"getting_started_with_wlan_station.out" \
+"lumosembedded.out" \
 
 BIN_OUTPUTS += \
-getting_started_with_wlan_station.hex \
+lumosembedded.hex \
 
 BIN_OUTPUTS__QUOTED += \
-"getting_started_with_wlan_station.hex" \
+"lumosembedded.hex" \
 
 
 # All Target
-all: getting_started_with_wlan_station.out
+all: lumosembedded.out
 
 # Tool invocations
-getting_started_with_wlan_station.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
+lumosembedded.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: ARM Linker'
-	"c:/ti/ccsv6/tools/compiler/arm_5.1.6/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 --abi=eabi -me -Ooff --opt_for_speed=2 -g --gcc --define=PART_TM4C123GH6PM --define=_USE_CLI_ --define=TARGET_IS_BLIZZARD_RA1=1 --define=ccs="ccs" --display_error_number --diag_warning=225 --diag_wrap=off -z -m"getting_started_with_wlan_station.map" --heap_size=0 --stack_size=600 -i"c:/ti/ccsv6/tools/compiler/arm_5.1.6/lib" -i"c:/ti/ccsv6/tools/compiler/arm_5.1.6/include" --reread_libs --warn_sections --display_error_number --diag_wrap=off --xml_link_info="getting_started_with_wlan_station_linkInfo.xml" --rom_model -o "getting_started_with_wlan_station.out" $(ORDERED_OBJS)
+	"c:/ti/ccsv6/tools/compiler/arm_5.1.6/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 --abi=eabi -me -Ooff --opt_for_speed=2 -g --gcc --define=PART_TM4C123GH6PM --define=_USE_CLI_ --define=TARGET_IS_BLIZZARD_RA1=1 --define=ccs="ccs" --display_error_number --diag_warning=225 --diag_wrap=off -z -m"lumosembedded.map" --heap_size=0 --stack_size=600 -i"c:/ti/ccsv6/tools/compiler/arm_5.1.6/lib" -i"c:/ti/ccsv6/tools/compiler/arm_5.1.6/include" --reread_libs --warn_sections --display_error_number --diag_wrap=off --xml_link_info="lumosembedded_linkInfo.xml" --rom_model -o "lumosembedded.out" $(ORDERED_OBJS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
-getting_started_with_wlan_station.hex: $(EXE_OUTPUTS)
+lumosembedded.hex: $(EXE_OUTPUTS)
 	@echo 'Invoking: ARM Hex Utility'
-	"c:/ti/ccsv6/tools/compiler/arm_5.1.6/bin/armhex"  -o "getting_started_with_wlan_station.hex" $(EXE_OUTPUTS__QUOTED)
+	"c:/ti/ccsv6/tools/compiler/arm_5.1.6/bin/armhex"  -o "lumosembedded.hex" $(EXE_OUTPUTS__QUOTED)
 	@echo 'Finished building: $@'
 	@echo ' '
 

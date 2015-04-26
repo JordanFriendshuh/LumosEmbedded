@@ -69,11 +69,11 @@ i2cVerifyBaseAddr(
         i2c_base == I2C3_BASE
     )
   {
-    return true;
+    return 1;
   }
   else
   {
-    return false;
+    return 0;
   }
 }
 
@@ -98,7 +98,7 @@ i2c_status_t i2cSetSlaveAddr(
 )
 {
   //I2C0_Type *myI2C;
-  if( i2cVerifyBaseAddr(baseAddr) == false)
+  if( i2cVerifyBaseAddr(baseAddr) == 0)
   {
     return I2C_INVALID_BASE;
   }
@@ -130,7 +130,7 @@ i2c_status_t i2cStop(
 )
 {
   //I2C0_Type *myI2C;
-  if( i2cVerifyBaseAddr(baseAddr) == false)
+  if( i2cVerifyBaseAddr(baseAddr) == 0)
   {
     return I2C_INVALID_BASE;
   }
@@ -151,28 +151,28 @@ i2c_status_t i2cStop(
 //    baseAddr:  The base address of the I2C peripheral that is being accessed
 //
 // Returns
-//    Returns true if the I2C device is busy
-//    Returns false if the I2C device is NOT busy or i2c_base is invalid
+//    Returns 1 if the I2C device is busy
+//    Returns 0 if the I2C device is NOT busy or i2c_base is invalid
 //*****************************************************************************
 bool
 I2CMasterBusy(uint32_t i2c_base)
 {
   //I2C0_Type *myI2C;
   
-  if( i2cVerifyBaseAddr(i2c_base) == false)
+  if( i2cVerifyBaseAddr(i2c_base) == 0)
   {
-    return false;
+    return 0;
   }
   
     //myI2C = (I2C0_Type *) i2c_base;
     
     if( HWREG(i2c_base + I2C_O_MCS) & I2C_MCS_BUSY)
     {
-        return(true);
+        return(1);
     }
     else
     {
-        return(false);
+        return(0);
     }
 }
 
@@ -183,17 +183,17 @@ I2CMasterBusy(uint32_t i2c_base)
 //    baseAddr:  The base address of the I2C peripheral that is being accessed
 //
 // Returns
-//    Returns true if the address was ACKed
-//    Returns false if the address was not ACKed or i2c_base is invalid
+//    Returns 1 if the address was ACKed
+//    Returns 0 if the address was not ACKed or i2c_base is invalid
 //*****************************************************************************
 bool
 I2CMasterAdrAck(uint32_t i2c_base)
 {
   //  I2C0_Type *myI2C;
     uint32_t status;
-  if( i2cVerifyBaseAddr(i2c_base) == false)
+  if( i2cVerifyBaseAddr(i2c_base) == 0)
   {
-    return false;
+    return 0;
   }
   
   //myI2C = (I2C0_Type *) i2c_base;
@@ -202,11 +202,11 @@ I2CMasterAdrAck(uint32_t i2c_base)
   status = HWREG(i2c_base + I2C_O_MCS);
   if((status & I2C_MCS_ADRACK)!= 0)
   {
-      return(false);
+      return(0);
   }
   else
   {
-      return(true);
+      return(1);
   }
 }
 
@@ -218,17 +218,17 @@ I2CMasterAdrAck(uint32_t i2c_base)
 //    baseAddr:  The base address of the I2C peripheral that is being accessed
 //
 // Returns
-//    Returns true if the data was ACKed
-//    Returns false if the data was not ACKed or i2c_base is invalid
+//    Returns 1 if the data was ACKed
+//    Returns 0 if the data was not ACKed or i2c_base is invalid
 //*****************************************************************************
 bool
 I2CMasterDatAck(uint32_t i2c_base)
 {
     //I2C0_Type *myI2C;
     uint32_t status;
-  if( i2cVerifyBaseAddr(i2c_base) == false)
+  if( i2cVerifyBaseAddr(i2c_base) == 0)
   {
-    return false;
+    return 0;
   }
   
   //myI2C = (I2C0_Type *) i2c_base;
@@ -237,11 +237,11 @@ I2CMasterDatAck(uint32_t i2c_base)
   status = HWREG(i2c_base + I2C_O_MCS);
   if((status & I2C_MCS_DATACK)!= 0)
   {
-      return(false);
+      return(0);
   }
   else
   {
-      return(true);
+      return(1);
   }
 }
 
@@ -283,7 +283,7 @@ i2c_status_t i2cSendByte(
 {
   //I2C0_Type *myI2C;
   
-  if( i2cVerifyBaseAddr(baseAddr) == false)
+  if( i2cVerifyBaseAddr(baseAddr) == 0)
   {
     return I2C_INVALID_BASE;
   }
@@ -359,7 +359,7 @@ i2c_status_t i2cGetByte(
 {
   //I2C0_Type *myI2C;
   
-  if( i2cVerifyBaseAddr(baseAddr) == false)
+  if( i2cVerifyBaseAddr(baseAddr) == 0)
   {
     return I2C_INVALID_BASE;
   }
