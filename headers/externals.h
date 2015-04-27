@@ -24,9 +24,13 @@ void initializeADC(void);
 // Get the ADC value of a given ADC Channel
 //*****************************************************************************
 uint32_t GetADCval(uint32_t Channel);
-
+void oneShotSet(int count);
 //*****************************************************************************
 void pwmInit();
+void pwmIRStart();
+void pwmIRStop();
+void oneShotSet(int count);
+void initializeIRTimer();
 //*****************************************************************************
 // The refresh rate will go from 0-75Hz.
 //*****************************************************************************

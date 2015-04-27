@@ -57,6 +57,7 @@ extern void xPortSysTickHandler(void);
 extern void vPortSVCHandler( void );
 extern void gpioHandle(void);
 extern void Timer0Handler(void);
+extern void Timer1Handle(void);
 
 //*****************************************************************************
 //
@@ -106,7 +107,7 @@ void (* const g_pfnVectors[])(void) =
     IntDefaultHandler,                      // Watchdog timer
     Timer0Handler,                      // Timer 0 subtimer A
     Timer0Handler,                      // Timer 0 subtimer B
-    IntDefaultHandler,                      // Timer 1 subtimer A
+    Timer1Handle,                      // Timer 1 subtimer A
     IntDefaultHandler,                      // Timer 1 subtimer B
     IntDefaultHandler,                      // Timer 2 subtimer A
     IntDefaultHandler,                      // Timer 2 subtimer B

@@ -46,8 +46,8 @@
 								<option id="com.ti.ccstudio.buildDefinitions.TMS470_5.1.compilerID.OPT_FOR_SPEED.324055442" name="Speed vs. size trade-offs (--opt_for_speed, -mf)" superClass="com.ti.ccstudio.buildDefinitions.TMS470_5.1.compilerID.OPT_FOR_SPEED" value="com.ti.ccstudio.buildDefinitions.TMS470_5.1.compilerID.OPT_FOR_SPEED.2" valueType="enumerated"/>
 								<option id="com.ti.ccstudio.buildDefinitions.TMS470_5.1.compilerID.INCLUDE_PATH.1218633398" name="Add dir to #include search path (--include_path, -I)" superClass="com.ti.ccstudio.buildDefinitions.TMS470_5.1.compilerID.INCLUDE_PATH" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${CG_TOOL_ROOT}/include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc}/getting_started_with_wlan_station/FreeRTOS/Source/include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc}/getting_started_with_wlan_station/FreeRTOS/Source/portable/CCS4/ARM_CM3&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/FreeRTOS/Source/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/FreeRTOS/Source/portable/CCS4/ARM_CM3}&quot;"/>
 									<listOptionValue builtIn="false" value="${TIVAWARE_ROOT}/"/>
 									<listOptionValue builtIn="false" value="&quot;${CC3100_SDK_ROOT}/examples/common&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${CC3100_SDK_ROOT}/simplelink/include&quot;"/>

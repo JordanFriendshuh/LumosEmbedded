@@ -5,6 +5,7 @@
  *      Author: CCS
  */
 #include "../headers/defines.h"
+#include "../headers/externals.h"
 #include "../headers/wrapper.h"
 #include "../headers/lightsManager.h"
 int lightsMode = 1;
@@ -14,6 +15,7 @@ char data[MSG_SIZE];
 _u8 g_Status = 0;
 _i16 Lights_ID = -1;
 _i16 Server_ID = 0;
+int IRRunning = 0;
 xSemaphoreHandle networking_sem;
 xSemaphoreHandle updateLight_sem;
 
@@ -43,8 +45,20 @@ void updateLights(void *pvParam){
 			break;
 		//Update the lights using the IR sensor
 		case 2:
+			startIR();
 			break;
 		}
+	}
+}
+
+void startIR(){
+	if(!IRRunning){
+		IRRunning = 1;
+		//Change later to reflect lightsdata
+		IRData = 0x00ff0000;
+		IRData |= (IR_BLUE << 8) | (~(IR_BLUE) & 0xff);
+		pwmIRStart();
+		oneShotSet(IR_9MS);
 	}
 }
 

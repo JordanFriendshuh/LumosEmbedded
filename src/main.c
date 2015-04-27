@@ -484,6 +484,7 @@ int main(int argc, char** argv)
 
     initializeTimer0(80000);
     initializeADC();
+    initializeIRTimer();
     lumosGpioConfig();
     pwmInit();
 
@@ -541,7 +542,7 @@ int main(int argc, char** argv)
 
     CLI_Write(" Connection established w/ AP and IP is acquired \n\r");
     //init default light values
-    lightsMode = 1;
+    lightsMode = 2;
     for(i = 0; i < 3; i++){
 		lightsData[i].on = 0;
 		lightsData[i].current = 1;

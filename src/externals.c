@@ -6,15 +6,18 @@
  */
 #include "../headers/defines.h"
 #include "inc/hw_nvic.h"
+#include "inc/hw_memmap.h"
 #include "driverlib/sysctl.h"
 #include "driverlib/gpio.h"
 #include "driverlib/pwm.h"
 #include "driverlib/pin_map.h"
+#include "driverlib/timer.h"
 //#include "inc/tm4c123gh6pm.h"
 #include "../headers/lm4f120h5qr.h"
 
 volatile uint16_t scaled_adc0_right = 0;
-#define PWM_PERIOD 0x103
+volatile _u32 IRData;
+#define PWM_PERIOD 0x524
 
 void lumosGpioConfig(){
 
@@ -42,7 +45,7 @@ void lumosGpioConfig(){
 //	portStruct->IEV &= ~(P2|P3|P4);
 //	portStruct->IEV |= (P2|P3|P4);
 //	portStruct->IM |= (P2|P3|P4);
-	HWREG(NVIC_PRI4) = (HWREG(NVIC_PRI4) & 0x0FFFFFFF) | 0x20000000; //Priority 1
+	//HWREG(NVIC_PRI4) = (HWREG(NVIC_PRI4) & 0x0FFFFFFF) | 0x20000000; //Priority 1
 	HWREG(NVIC_EN0) |= NVIC_EN0_INT30;
 }
 
@@ -78,6 +81,20 @@ void initializeTimer0(uint32_t count)
 	NVIC_EN0_R |= NVIC_EN0_INT19; 									//Enable timer0A interrupt
   TIMER0_CTL_R    |=  TIMER_CTL_TAEN;            // Turn the timer on
 
+}
+
+void oneShotSet(int count){
+	TimerLoadSet(TIMER1_BASE, TIMER_A, count);
+	TimerEnable(TIMER1_BASE, TIMER_A);
+}
+
+void initializeIRTimer()
+{
+	SysCtlPeripheralEnable(SYSCTL_PERIPH_TIMER1);
+	TimerIntEnable(TIMER1_BASE,TIMER_TIMA_TIMEOUT);
+	NVIC_PRI5_R = (NVIC_PRI5_R & 0xFFFF0FFF) | 0x00004000; //Priority 2
+	NVIC_EN0_R |= NVIC_EN0_INT21; 									//Enable timer0A interrupt
+	TimerConfigure(TIMER1_BASE, TIMER_CFG_ONE_SHOT);
 }
 
 /****************************************************************************
@@ -167,16 +184,26 @@ uint32_t GetADCval(uint32_t Channel)
   return result;
 }
 
+void pwmIRStart(){
+	PWMOutputState(PWM1_BASE, PWM_OUT_2_BIT, 1);
+}
+void pwmIRStop(){
+	PWMOutputState(PWM1_BASE, PWM_OUT_2_BIT, 0);
+}
 //*****************************************************************************
-
+//PWMOutputState(PWM1_BASE, PWM_OUT_2_BIT, 0);
 void pwmInit(){
 	SysCtlPeripheralEnable(GPIO_PORTA_BASE);
 	SysCtlPeripheralEnable(SYSCTL_PERIPH_PWM1);
 	GPIOPinConfigure(GPIO_PA6_M1PWM2);
 	GPIOPinTypePWM(GPIO_PORTA_BASE, GPIO_PIN_6);
+	GPIOPinConfigure(GPIO_PA7_M1PWM3);
+	GPIOPinTypePWM(GPIO_PORTA_BASE, GPIO_PIN_7);
 	PWMGenConfigure(PWM1_BASE, PWM_GEN_1, PWM_GEN_MODE_DOWN | PWM_GEN_MODE_NO_SYNC);
 	PWMGenPeriodSet(PWM1_BASE, PWM_GEN_1, PWM_PERIOD);
 	PWMPulseWidthSet(PWM1_BASE, PWM_OUT_2, PWM_PERIOD /2); //50% duty
+	PWMPulseWidthSet(PWM1_BASE, PWM_OUT_3, PWM_PERIOD /2); //50% duty
 	PWMGenEnable(PWM1_BASE, PWM_GEN_1);
-	PWMOutputState(PWM1_BASE, PWM_OUT_2_BIT, 1);
+	PWMOutputState(PWM1_BASE, PWM_OUT_0_BIT | PWM_OUT_3_BIT, 1);
 }
+

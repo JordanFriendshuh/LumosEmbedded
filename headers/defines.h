@@ -61,6 +61,14 @@
 #define KNOB_BLUE 		P1
 #define KNOB_GRN 		P0
 
+#define IR_GREEN 		0x10
+#define IR_DIM 			0x20
+#define IR_BLUE			0x50
+#define IR_9MS			(SysCtlClockGet()/111)
+#define IR_560uS		(SysCtlClockGet()/1786)
+#define IR_4_5MS		(SysCtlClockGet()/222)
+#define IR_1650uS		(SysCtlClockGet()/606)
+
 #define ENC_SCALE		2
 
 extern xSemaphoreHandle updateLight_sem;
@@ -95,5 +103,7 @@ extern _u8 g_Status;
 extern _i16 Lights_ID;
 extern _i16 Server_ID;
 extern lightData lightsData[NUM_OF_LIGHTS];
+extern volatile _u32 IRData;
+extern int IRRunning;
 
 #endif /* DEFINES_H_ */

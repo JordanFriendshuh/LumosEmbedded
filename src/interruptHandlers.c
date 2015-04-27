@@ -9,6 +9,7 @@
 #include "inc/hw_timer.h"
 #include "inc/hw_memmap.h"
 #include "../headers/externals.h"
+#include "driverlib/timer.h"
 int encoderFlag = 0;
 int encLeftCount;
 int encRightCount;
@@ -108,6 +109,49 @@ void Timer0Handler()
 
 //	//clearing the interrupt
 	HWREG(TIMER0_BASE + TIMER_O_ICR) = 0x01;
-
 }
 
+void Timer1Handle(){
+
+	static int index = -1;
+	static int pause = 0;
+	TimerDisable(TIMER1_BASE, TIMER_A);
+	TimerIntClear(TIMER1_BASE, TIMER_TIMA_TIMEOUT);
+	if(index == -1){
+		//Init pause
+		pwmIRStop();
+		oneShotSet(IR_4_5MS);
+		index++;
+	}else if(index == 33){
+		index = -1;
+		IRRunning = 0;
+		pause = 0;
+	}else if(index == 32){ //33?
+		if(pause){
+			pwmIRStop();
+			oneShotSet(IR_560uS);
+			index++;
+		}else{
+			//send stop bit
+			pwmIRStart();
+			oneShotSet(IR_560uS);
+			pause = 1;
+		}
+	}else{
+		if(pause){
+			pwmIRStop();
+			if(IRData & (0x1 << (31 - index))){
+				oneShotSet(IR_1650uS);
+			}else{
+				oneShotSet(IR_560uS);
+			}
+			pause = 0;
+			index++;
+		}else{
+			pwmIRStart();
+			oneShotSet(IR_560uS);
+			pause = 1;
+		}
+	}
+	//HWREG(TIMER1_BASE + TIMER_O_ICR) = 0x01;
+}

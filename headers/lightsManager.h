@@ -15,5 +15,6 @@ int disconnectLights();
 int recvFromLights();
 void jsonPut();
 void numChange();
+void startIR();
 int connectToLights();
 #endif /* LIGHTSMANAGER_H_ */
