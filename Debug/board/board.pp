@@ -2,7 +2,7 @@
 
 board/board.obj: ../board/board.c
 board/board.obj: C:/ti/CC3100SDK_1.0.0/cc3100-sdk/simplelink/include/simplelink.h
-board/board.obj: C:/ti/CC3100SDK_1.0.0/cc3100-sdk/platform/tiva-c-launchpad/user.h
+board/board.obj: C:/Users/Nick/workspace_v6_0/lumosembedded/simplelink/user.h
 board/board.obj: c:/ti/ccsv6/tools/compiler/arm_5.1.6/include/string.h
 board/board.obj: c:/ti/ccsv6/tools/compiler/arm_5.1.6/include/linkage.h
 board/board.obj: C:/ti/CC3100SDK_1.0.0/cc3100-sdk/platform/tiva-c-launchpad/board.h
@@ -33,7 +33,7 @@ board/board.obj: ../board/board.h
 
 ../board/board.c: 
 C:/ti/CC3100SDK_1.0.0/cc3100-sdk/simplelink/include/simplelink.h: 
-C:/ti/CC3100SDK_1.0.0/cc3100-sdk/platform/tiva-c-launchpad/user.h: 
+C:/Users/Nick/workspace_v6_0/lumosembedded/simplelink/user.h: 
 c:/ti/ccsv6/tools/compiler/arm_5.1.6/include/string.h: 
 c:/ti/ccsv6/tools/compiler/arm_5.1.6/include/linkage.h: 
 C:/ti/CC3100SDK_1.0.0/cc3100-sdk/platform/tiva-c-launchpad/board.h: 

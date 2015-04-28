@@ -8,26 +8,29 @@
 #include "../headers/externals.h"
 #include "../headers/wrapper.h"
 #include "../headers/lightsManager.h"
-int lightsMode = 1;
-char header[HEADER_LEN] = "PUT /api/newdeveloper/lights/1/state HTTP/1.1\r\nHost: 192.168.1.133\r\nContent-Type: application/json\r\nContent-Length: 50\r\n\r\n";
+char header[HEADER_LEN] = "PUT /api/newdeveloper/lights/1/state HTTP/1.1\r\nHost: 192.168.1.2\r\nContent-Type: application/json\r\nContent-Length: 65\r\n\r\n";
 lightData lightsData[NUM_OF_LIGHTS];
+relayData relay;
+IRDataStruct IR;
 char data[MSG_SIZE];
 _u8 g_Status = 0;
 _i16 Lights_ID = -1;
 _i16 Server_ID = 0;
 int IRRunning = 0;
+short relayEnable = 0;
+short hueEnable = 0;
+short IREnable = 0;
 xSemaphoreHandle networking_sem;
 xSemaphoreHandle updateLight_sem;
 
 void updateLights(void *pvParam){
 	while(1){
 		while(!xSemaphoreTake(updateLight_sem, portMAX_DELAY));
-		switch(lightsMode){
 		//Update the physical lights by turning the relay off or on
-		case 0:
-			if(lightsData[0].current == 0){
-				lightsData[0].current = 1;
-				if(lightsData[0].on){
+		if(relayEnable){
+			if(relay.current == 0){
+				relay.current = 1;
+				if(relay.on){
 					HWREG(GPIO_PORTD_BASE + GPIO_O_DATA) |= RELAY_SET;
 				}else{
 					HWREG(GPIO_PORTD_BASE + GPIO_O_DATA) |= RELAY_RESET;
@@ -35,31 +38,51 @@ void updateLights(void *pvParam){
 				vTaskDelay(1000);
 				HWREG(GPIO_PORTD_BASE + GPIO_O_DATA) &= ~(RELAY_SET | RELAY_RESET);
 			}
-			break;
+		}
 		//Update the lights using the philips hue
-		case 1:
+		if(hueEnable){
 			while(!xSemaphoreTake(networking_sem, portMAX_DELAY));
 			numChange();
 			jsonPut();
 			xSemaphoreGive(networking_sem);
-			break;
+		}
 		//Update the lights using the IR sensor
-		case 2:
-			startIR();
-			break;
+		if(IREnable){
+			if(IR.current == 0){
+				IR.current = 1;
+				CLI_Write("Updating IR\n\r");
+				startIR();
+			}
 		}
 	}
 }
 
 void startIR(){
-	if(!IRRunning){
+	/*while(IRRunning){
+		vTaskDelay(100);
+	}
+	if(IR.IRColorValue != IR_OFF && IR.on == 0){
 		IRRunning = 1;
-		//Change later to reflect lightsdata
 		IRData = 0x00ff0000;
-		IRData |= (IR_BLUE << 8) | (~(IR_BLUE) & 0xff);
+		IRData |= (IR_ON << 8) | (~(IR_ON) & 0xff);
 		pwmIRStart();
 		oneShotSet(IR_9MS);
+		while(IRRunning){
+				vTaskDelay(100);
+		}
+		IR.on = 1;
 	}
+	if(IR.IRColorValue == IR_OFF)
+		IR.on = 0;*/
+	while(IRRunning){
+		vTaskDelay(100);
+	}
+	IRRunning = 1;
+	//Change later to reflect lightsdata
+	IRData = 0x00ff0000;
+	IRData |= (IR.IRColorValue << 8) | (~(IR.IRColorValue) & 0xff);
+	pwmIRStart();
+	oneShotSet(IR_9MS);
 }
 
 int pow(int base, int exp){
@@ -199,13 +222,15 @@ void jsonPut(){
 			while(0 > sendWrapper(Lights_ID, "{\"on\":", 6, 0));
 			if(lightsData[i].on){
 				while(0 > sendWrapper(Lights_ID, "true", 4, 0));
-				while(0 > sendWrapper(Lights_ID, ", \"sat\":", 8, 0));
+				while(0 > sendWrapper(Lights_ID, ",\"sat\":", 7, 0));
 				while(0 > sendWrapper(Lights_ID, lightsData[i].sat, lightsData[i].satSize, 0));
-				while(0 > sendWrapper(Lights_ID, ", \"bri\":", 8, 0));
+				while(0 > sendWrapper(Lights_ID, ",\"bri\":", 7, 0));
 				while(0 > sendWrapper(Lights_ID, lightsData[i].bri, lightsData[i].briSize, 0));
-				while(0 > sendWrapper(Lights_ID, ", \"hue\":", 8, 0));
-				while(0 > sendWrapper(Lights_ID, lightsData[i].hue, lightsData[i].hueSize, 0));
-				while(0 > sendWrapper(Lights_ID, "}", 1, 0));
+				while(0 > sendWrapper(Lights_ID, ",\"xy\":[0.", 9, 0));
+				while(0 > sendWrapper(Lights_ID, lightsData[i].x, lightsData[i].xSize, 0));
+				while(0 > sendWrapper(Lights_ID, ",0.", 3, 0));
+				while(0 > sendWrapper(Lights_ID, lightsData[i].y, lightsData[i].ySize, 0));
+				while(0 > sendWrapper(Lights_ID, "]}", 2, 0));
 			}else{
 				while(0 > sendWrapper(Lights_ID, "false", 5, 0));
 				while(0 > sendWrapper(Lights_ID, "}", 1, 0));

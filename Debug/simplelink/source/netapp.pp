@@ -2,7 +2,7 @@
 
 simplelink/source/netapp.obj: ../simplelink/source/netapp.c
 simplelink/source/netapp.obj: C:/ti/CC3100SDK_1.0.0/cc3100-sdk/simplelink/include/simplelink.h
-simplelink/source/netapp.obj: C:/ti/CC3100SDK_1.0.0/cc3100-sdk/platform/tiva-c-launchpad/user.h
+simplelink/source/netapp.obj: C:/Users/Nick/workspace_v6_0/lumosembedded/simplelink/user.h
 simplelink/source/netapp.obj: c:/ti/ccsv6/tools/compiler/arm_5.1.6/include/string.h
 simplelink/source/netapp.obj: c:/ti/ccsv6/tools/compiler/arm_5.1.6/include/linkage.h
 simplelink/source/netapp.obj: C:/ti/CC3100SDK_1.0.0/cc3100-sdk/platform/tiva-c-launchpad/board.h
@@ -24,7 +24,7 @@ simplelink/source/netapp.obj: ../simplelink/source/driver.h
 
 ../simplelink/source/netapp.c: 
 C:/ti/CC3100SDK_1.0.0/cc3100-sdk/simplelink/include/simplelink.h: 
-C:/ti/CC3100SDK_1.0.0/cc3100-sdk/platform/tiva-c-launchpad/user.h: 
+C:/Users/Nick/workspace_v6_0/lumosembedded/simplelink/user.h: 
 c:/ti/ccsv6/tools/compiler/arm_5.1.6/include/string.h: 
 c:/ti/ccsv6/tools/compiler/arm_5.1.6/include/linkage.h: 
 C:/ti/CC3100SDK_1.0.0/cc3100-sdk/platform/tiva-c-launchpad/board.h: 

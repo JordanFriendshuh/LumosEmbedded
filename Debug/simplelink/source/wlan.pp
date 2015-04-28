@@ -2,7 +2,7 @@
 
 simplelink/source/wlan.obj: ../simplelink/source/wlan.c
 simplelink/source/wlan.obj: C:/ti/CC3100SDK_1.0.0/cc3100-sdk/simplelink/include/simplelink.h
-simplelink/source/wlan.obj: C:/ti/CC3100SDK_1.0.0/cc3100-sdk/platform/tiva-c-launchpad/user.h
+simplelink/source/wlan.obj: C:/Users/Nick/workspace_v6_0/lumosembedded/simplelink/user.h
 simplelink/source/wlan.obj: c:/ti/ccsv6/tools/compiler/arm_5.1.6/include/string.h
 simplelink/source/wlan.obj: c:/ti/ccsv6/tools/compiler/arm_5.1.6/include/linkage.h
 simplelink/source/wlan.obj: C:/ti/CC3100SDK_1.0.0/cc3100-sdk/platform/tiva-c-launchpad/board.h
@@ -24,7 +24,7 @@ simplelink/source/wlan.obj: ../simplelink/source/driver.h
 
 ../simplelink/source/wlan.c: 
 C:/ti/CC3100SDK_1.0.0/cc3100-sdk/simplelink/include/simplelink.h: 
-C:/ti/CC3100SDK_1.0.0/cc3100-sdk/platform/tiva-c-launchpad/user.h: 
+C:/Users/Nick/workspace_v6_0/lumosembedded/simplelink/user.h: 
 c:/ti/ccsv6/tools/compiler/arm_5.1.6/include/string.h: 
 c:/ti/ccsv6/tools/compiler/arm_5.1.6/include/linkage.h: 
 C:/ti/CC3100SDK_1.0.0/cc3100-sdk/platform/tiva-c-launchpad/board.h: 

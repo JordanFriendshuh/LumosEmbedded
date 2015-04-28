@@ -28,7 +28,7 @@
 
 #define BUF_SIZE        1400
 #define NO_OF_PACKETS   1000
-#define MSG_SIZE 17
+#define MSG_SIZE 19
 #define FLOWCONTROL(func) \
 	clean = (func);\
 	if(clean < 0)\
@@ -36,7 +36,7 @@
 
 #define NUM_OF_LIGHTS 3
 #define LIGHT_INDEX 29
-#define HEADER_LEN 122
+#define HEADER_LEN 120
 #define P0 (1 << 0)
 #define P1 (1 << 1)
 #define P2 (1 << 2)
@@ -61,9 +61,25 @@
 #define KNOB_BLUE 		P1
 #define KNOB_GRN 		P0
 
+
 #define IR_GREEN 		0x10
 #define IR_DIM 			0x20
 #define IR_BLUE			0x50
+#define IR_OFF			0x60
+#define IR_RED			0x90
+#define IR_BRIGHT		0xA0
+#define IR_SMOOTH		0xC8
+#define IR_WHITE		0xD0
+#define IR_FADE			0xD8
+#define IR_ON			0xE0
+#define IR_STROBE		0xE8
+#define IR_FLASH		0xF0
+#define IR_TEAL			0x18
+#define IR_PINK			0x48
+#define IR_PURPLE		0x68
+#define IR_LBLUE		0x70
+#define IR_YELLOW		0xA8
+
 #define IR_9MS			(SysCtlClockGet()/111)
 #define IR_560uS		(SysCtlClockGet()/1786)
 #define IR_4_5MS		(SysCtlClockGet()/222)
@@ -75,7 +91,9 @@ extern xSemaphoreHandle updateLight_sem;
 extern xSemaphoreHandle networking_sem;
 extern void strCpy(char * str0, char * str1, int size);
 extern volatile uint16_t scaled_adc0_right;
-
+extern short relayEnable;
+extern short hueEnable;
+extern short IREnable;
 
 /* Application specific status/error codes */
 typedef enum{
@@ -87,23 +105,39 @@ typedef enum{
 }e_AppStatusCodes;
 
 typedef struct lightData{
-	int current;
-	int on;
+	short current;
+	short on;
 	char bri[3];
 	int briSize;
 	char sat[3];
 	int satSize;
-	char hue[6];
-	int hueSize;
+	char x[3];
+	int xSize;
+	char y[3];
+	int ySize;
 	int numChange;
 	int numChangeMode;
 } lightData;
+
+typedef struct relayData{
+	short current;
+	short on;
+} relayData;
+
+typedef struct IRDataStruct{
+	int current;
+	int on;
+	int IRColorValue;
+} IRDataStruct;
 
 extern _u8 g_Status;
 extern _i16 Lights_ID;
 extern _i16 Server_ID;
 extern lightData lightsData[NUM_OF_LIGHTS];
+extern relayData relay;
+extern IRDataStruct IR;
 extern volatile _u32 IRData;
 extern int IRRunning;
+
 
 #endif /* DEFINES_H_ */

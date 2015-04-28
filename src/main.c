@@ -541,8 +541,7 @@ int main(int argc, char** argv)
        }
 
     CLI_Write(" Connection established w/ AP and IP is acquired \n\r");
-    //init default light values
-    lightsMode = 2;
+    //init default light value    lightsMode = 2;
     for(i = 0; i < 3; i++){
 		lightsData[i].on = 0;
 		lightsData[i].current = 1;
@@ -551,11 +550,15 @@ int main(int argc, char** argv)
 		strCpy("100", lightsData[i].bri, 3);
 		lightsData[i].briSize = 3;
 		//strCpy("30000", lightsData[i].hue, 5);
-		lightsData[i].hue[0] = '0';
-		lightsData[i].hueSize = 1;
+		lightsData[i].x[0] = '1';
+		lightsData[i].xSize = 1;
+		lightsData[i].y[0] = '1';
+		lightsData[i].ySize = 1;
 		lightsData[i].numChange = 0;
 		lightsData[i].numChangeMode = -1;
     }
+    IR.current = 1;
+    relay.current = 1;
     vSemaphoreCreateBinary(updateLight_sem);
     vSemaphoreCreateBinary(networking_sem);
     xTaskCreate(updateLights, "Lights Manager", 1536, NULL, 2, NULL); //4096

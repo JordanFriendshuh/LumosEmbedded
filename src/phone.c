@@ -38,7 +38,7 @@ static int inputDigitCounter(char * rawData, int start){
 	return i - start;
 }
 void inputConvert(char * rawData){
-	int i, lightIndex;
+	int i, lightIndex, temp;
 	//convert the first value to the light value, have to minus one cause hue starts count at 1, fucking n00bs
 	//If the command is turning the light off, the rest of the message is garbage
 	for(i = 0; i < MSG_SIZE; i++){
@@ -57,6 +57,50 @@ void inputConvert(char * rawData){
 			i++;
 			lightsData[lightIndex].current = 0;
 		}
+		if(rawData[i] == 'r'){
+			if(rawData[i + 1] == 'f'){
+				relay.current = 0;
+				relay.on = 0;
+			}
+			if(rawData[i + 1] == 'o'){
+				relay.current = 0;
+				relay.on = 1;
+			}
+			i = i + 2;
+		}
+		if(rawData[i] == 'e'){
+			switch(rawData[i + 1]){
+				case 'r':
+					relayEnable = 1;
+					break;
+				case 'h':
+					hueEnable = 1;
+					break;
+				case 'i':
+					IREnable = 1;
+					break;
+			}
+			i = i + 2;
+		}
+		if(rawData[i] == 'd'){
+			switch(rawData[i + 1]){
+				case 'r':
+					relayEnable = 0;
+					break;
+				case 'h':
+					hueEnable = 0;
+					break;
+				case 'i':
+					IREnable = 0;
+					break;
+			}
+			i = i + 2;
+		}
+		if(rawData[i] == 'i'){
+			IR.current = 0;
+			IR.IRColorValue = (0x10 * (rawData[i + 1] - 48)) + (rawData[i + 2] - 48);
+			i = i + 3;
+		}
 		//read which parameter to update, then figure out the length of the number, copy the char string and update the counter
 		if(rawData[i] == 's'){
 			i++;
@@ -72,11 +116,18 @@ void inputConvert(char * rawData){
 			i = i + lightsData[lightIndex].briSize;
 			lightsData[lightIndex].current = 0;
 		}
-		if(rawData[i] == 'h'){
+		if(rawData[i] == 'x'){
 			i++;
-			lightsData[lightIndex].hueSize = inputDigitCounter(rawData, i );
-			strCpy(rawData + i, lightsData[lightIndex].hue, lightsData[lightIndex].hueSize);
-			i = i + lightsData[lightIndex].hueSize;
+			lightsData[lightIndex].xSize = inputDigitCounter(rawData, i );
+			strCpy(rawData + i, lightsData[lightIndex].x, lightsData[lightIndex].xSize);
+			i = i + lightsData[lightIndex].xSize;
+			lightsData[lightIndex].current = 0;
+		}
+		if(rawData[i] == 'y'){
+			i++;
+			lightsData[lightIndex].ySize = inputDigitCounter(rawData, i );
+			strCpy(rawData + i, lightsData[lightIndex].y, lightsData[lightIndex].ySize);
+			i = i + lightsData[lightIndex].ySize;
 			lightsData[lightIndex].current = 0;
 		}
 	}

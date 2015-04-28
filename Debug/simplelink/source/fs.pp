@@ -2,7 +2,7 @@
 
 simplelink/source/fs.obj: ../simplelink/source/fs.c
 simplelink/source/fs.obj: C:/ti/CC3100SDK_1.0.0/cc3100-sdk/simplelink/include/simplelink.h
-simplelink/source/fs.obj: C:/ti/CC3100SDK_1.0.0/cc3100-sdk/platform/tiva-c-launchpad/user.h
+simplelink/source/fs.obj: C:/Users/Nick/workspace_v6_0/lumosembedded/simplelink/user.h
 simplelink/source/fs.obj: c:/ti/ccsv6/tools/compiler/arm_5.1.6/include/string.h
 simplelink/source/fs.obj: c:/ti/ccsv6/tools/compiler/arm_5.1.6/include/linkage.h
 simplelink/source/fs.obj: C:/ti/CC3100SDK_1.0.0/cc3100-sdk/platform/tiva-c-launchpad/board.h
@@ -24,7 +24,7 @@ simplelink/source/fs.obj: ../simplelink/source/driver.h
 
 ../simplelink/source/fs.c: 
 C:/ti/CC3100SDK_1.0.0/cc3100-sdk/simplelink/include/simplelink.h: 
-C:/ti/CC3100SDK_1.0.0/cc3100-sdk/platform/tiva-c-launchpad/user.h: 
+C:/Users/Nick/workspace_v6_0/lumosembedded/simplelink/user.h: 
 c:/ti/ccsv6/tools/compiler/arm_5.1.6/include/string.h: 
 c:/ti/ccsv6/tools/compiler/arm_5.1.6/include/linkage.h: 
 C:/ti/CC3100SDK_1.0.0/cc3100-sdk/platform/tiva-c-launchpad/board.h: 

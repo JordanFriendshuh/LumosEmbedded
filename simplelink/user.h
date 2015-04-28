@@ -77,6 +77,7 @@ extern "C" {
 #include "uart.h"
 #endif
 
+#define uint64_t 		unsigned long long int
 #define uint32_t        _u32
 #define int32_t         _i32
 #define uint8_t         _u8
