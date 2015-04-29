@@ -93,6 +93,12 @@ void inputConvert(char * rawData){
 				case 'i':
 					IREnable = 1;
 					break;
+				case 's':
+					motEnable = 1;
+					break;
+				case 'm':
+					micEnable = 1;
+					break;
 			}
 			i = i + 2;
 		}
@@ -106,6 +112,12 @@ void inputConvert(char * rawData){
 					break;
 				case 'i':
 					IREnable = 0;
+					break;
+				case 's':
+					motEnable = 0;
+					break;
+				case 'm':
+					micEnable = 0;
 					break;
 			}
 			i = i + 2;

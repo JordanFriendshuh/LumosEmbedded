@@ -17,9 +17,9 @@ _u8 g_Status = 0;
 _i16 Lights_ID = -1;
 _i16 Server_ID = 0;
 int IRRunning = 0;
-short relayEnable = 0;
-short hueEnable = 0;
-short IREnable = 0;
+int relayEnable = 0;
+int hueEnable = 0;
+int IREnable = 0;
 xSemaphoreHandle networking_sem;
 xSemaphoreHandle updateLight_sem;
 

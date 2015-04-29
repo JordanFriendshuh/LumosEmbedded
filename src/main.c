@@ -476,16 +476,34 @@ int main(int argc, char** argv)
     _i32 retVal = -1;
     int i;
     g_Status = 0;
+    for(i = 0; i < 3; i++){
+    		lightsData[i].on = 0;
+    		lightsData[i].current = 1;
+    		strCpy("150", lightsData[i].sat, 3);
+    		lightsData[i].satSize = 3;
+    		strCpy("100", lightsData[i].bri, 3);
+    		lightsData[i].briSize = 3;
+    		//strCpy("30000", lightsData[i].hue, 5);
+    		lightsData[i].x[0] = '1';
+    		lightsData[i].xSize = 1;
+    		lightsData[i].y[0] = '1';
+    		lightsData[i].ySize = 1;
+    		lightsData[i].numChange = 0;
+    		lightsData[i].numChangeMode = -1;
+        }
+	IR.current = 1;
+	IR.on = 0;
+	relay.current = 1;
+	prefMode = 2;
+	IREnable = 1;
+	relayEnable = 0;
+	micEnable = 0;
+	motEnable = 0;
     vSemaphoreCreateBinary(updateLight_sem);
     /* Stop WDT and initialize the system-clock of the MCU
        These functions needs to be implemented in PAL */
     stopWDT();
     initClk();
-    initializeTimer0(80000);
-    initializeADC();
-    initializeIRTimer();
-    lumosGpioConfig();
-    pwmInit();
 
     /* Configure command line interface */
     CLI_Configure();
@@ -502,6 +520,7 @@ int main(int argc, char** argv)
      * Note that all profiles and persistent settings that were done on the
      * device will be lost
      */
+    CLI_Write("\n\r Starting Device \n\r");
     retVal = configureSimpleLinkToDefaultState();
     if(retVal < 0)
     {
@@ -541,28 +560,11 @@ int main(int argc, char** argv)
 
     CLI_Write(" Connection established w/ AP and IP is acquired \n\r");
     //init default light value    lightsMode = 2;
-    for(i = 0; i < 3; i++){
-		lightsData[i].on = 0;
-		lightsData[i].current = 1;
-		strCpy("150", lightsData[i].sat, 3);
-		lightsData[i].satSize = 3;
-		strCpy("100", lightsData[i].bri, 3);
-		lightsData[i].briSize = 3;
-		//strCpy("30000", lightsData[i].hue, 5);
-		lightsData[i].x[0] = '1';
-		lightsData[i].xSize = 1;
-		lightsData[i].y[0] = '1';
-		lightsData[i].ySize = 1;
-		lightsData[i].numChange = 0;
-		lightsData[i].numChangeMode = -1;
-    }
-    IR.current = 1;
-    IR.on = 0;
-    relay.current = 1;
-    prefMode = 2;
-    IREnable = 1;
-    relayEnable = 0;
-    vSemaphoreCreateBinary(updateLight_sem);
+    initializeTimer0(80000);
+        initializeADC();
+        initializeIRTimer();
+        lumosGpioConfig();
+        pwmInit();
     vSemaphoreCreateBinary(networking_sem);
     xTaskCreate(updateLights, "Lights Manager", 1536, NULL, 2, NULL); //4096
     xTaskCreate(serverThread, "Server", 1024, NULL, 1, NULL);

@@ -10,12 +10,15 @@
 #include "inc/hw_memmap.h"
 #include "../headers/externals.h"
 #include "driverlib/timer.h"
+#define MOT_SIZE 25
 int encoderFlag = 0;
 int encLeftCount;
 int encRightCount;
 int boolFlag = 1;
 int buttonBounce = 0;
 int prefMode = 0;
+int micEnable = 0;
+int motEnable = 0;
 
 void gpioHandle(void){
 	int i;
@@ -75,13 +78,67 @@ void gpioHandle(void){
 
 void Timer0Handler()
 {
-	int i, mic_value, motionValue;
+	int i, mic_value, motionValue, motLongAve, motShortAve;
 	static int mic_flag = 0;
 	static int mic_count = 0;
-	static int motValues[100];
+	static int motValues[MOT_SIZE];
+	static int motIndex = 0;
+	static short motFlag = 0;
+
 //	//comes in here every 1 ms
-	mic_value = GetADCval(1)/41 + 1;
-	motionValue = GetADCval(0);
+	if(motEnable){
+		motionValue = GetADCval(0);
+		//motion sensor logic
+		if(motFlag){
+			motLongAve = 0;
+			motShortAve = 0;
+			motValues[motIndex % MOT_SIZE] = motionValue;
+			for(i = 0; i < MOT_SIZE; i++){
+				motLongAve += motValues[i];
+				//Only include the 5 most recent for local average
+				if((motIndex % MOT_SIZE - i) % MOT_SIZE < 5)
+					motShortAve += motValues[i];
+			}
+			motLongAve = motLongAve / MOT_SIZE;
+			motShortAve = motShortAve / 5;
+			motIndex++;
+			//motion detected, turn shit on
+			//if(motShortAve - motLongAve > 2 || motShortAve - motLongAve < -2){
+			if(motShortAve - motLongAve > 2 || motShortAve - motLongAve < -2){
+				switch(prefMode){
+					case 0:
+						if(!relay.on){
+							relay.current = 0;
+							relay.on = 1;
+							xSemaphoreGiveFromISR(updateLight_sem, 0);
+						}
+						break;
+					case 1:
+						for(i = 0; i < NUM_OF_LIGHTS; i++){
+							if(!lightsData[i].on){
+								lightsData[i].current = 0;
+								lightsData[i].on = 1;
+								xSemaphoreGiveFromISR(updateLight_sem, 0);
+							}
+						}
+						break;
+					case 2:
+						if(!IR.on){
+							IR.current = 0;
+							IR.IRColorValue = IR_ON;
+							xSemaphoreGiveFromISR(updateLight_sem, 0);
+						}
+						break;
+				}
+			}
+		}else{
+			motValues[motIndex] = motionValue;
+			motIndex++;
+			if(motIndex == MOT_SIZE){
+				motFlag = 1;
+			}
+		}
+	}
 	if(buttonBounce){
 		buttonBounce++;
 		if(buttonBounce > 20){
@@ -116,40 +173,43 @@ void Timer0Handler()
 			encoderFlag++;
 		}
 	}
-	if(mic_flag == 0){
-		if(mic_value > 80){
-			switch(prefMode){
-				case 0:
-					relay.current = 0;
-					relay.on = !relay.on;
-					break;
-				case 1:
-					for(i = 0; i < NUM_OF_LIGHTS; i++){
-						lightsData[i].current = 0;
-						if(lightsData[i].on)
-							lightsData[i].on = 0;
+	if(micEnable){
+		mic_value = GetADCval(1)/41 + 1;
+		if(mic_flag == 0){
+			if(mic_value > 80){
+				switch(prefMode){
+					case 0:
+						relay.current = 0;
+						relay.on = !relay.on;
+						break;
+					case 1:
+						for(i = 0; i < NUM_OF_LIGHTS; i++){
+							lightsData[i].current = 0;
+							if(lightsData[i].on)
+								lightsData[i].on = 0;
+							else
+								lightsData[i].on = 1;
+						}
+						break;
+					case 2:
+						IR.current = 0;
+						if(IR.on)
+							IR.IRColorValue = IR_OFF;
 						else
-							lightsData[i].on = 1;
-					}
-				case 2:
-					IR.current = 0;
-					if(IR.on)
-						IR.IRColorValue = IR_OFF;
-					else
-						IR.IRColorValue = IR_ON;
-					break;
+							IR.IRColorValue = IR_ON;
+						break;
+				}
+			xSemaphoreGiveFromISR(updateLight_sem, 0);
+			mic_flag = 1;
+			mic_count = 0;
 			}
-	 	xSemaphoreGiveFromISR(updateLight_sem, 0);
-		mic_flag = 1;
-		mic_count = 0;
+		}else{
+			if(mic_count > 20)
+				mic_flag = 0;
+			else
+				mic_count++;
 		}
-	}else{
-		if(mic_count > 20)
-			mic_flag = 0;
-		else
-			mic_count++;
 	}
-
 //	//clearing the interrupt
 	HWREG(TIMER0_BASE + TIMER_O_ICR) = 0x01;
 }

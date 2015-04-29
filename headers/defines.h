@@ -91,9 +91,11 @@ extern xSemaphoreHandle updateLight_sem;
 extern xSemaphoreHandle networking_sem;
 extern void strCpy(char * str0, char * str1, int size);
 extern volatile uint16_t scaled_adc0_right;
-extern short relayEnable;
-extern short hueEnable;
-extern short IREnable;
+extern int relayEnable;
+extern int hueEnable;
+extern int IREnable;
+extern int micEnable;
+extern int motEnable;
 
 /* Application specific status/error codes */
 typedef enum{
