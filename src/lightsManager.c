@@ -37,6 +37,7 @@ void updateLights(void *pvParam){
 				}
 				vTaskDelay(1000);
 				HWREG(GPIO_PORTD_BASE + GPIO_O_DATA) &= ~(RELAY_SET | RELAY_RESET);
+				CLI_Write("Relay Updated\n\r");
 			}
 		}
 		//Update the lights using the philips hue
@@ -58,7 +59,7 @@ void updateLights(void *pvParam){
 }
 
 void startIR(){
-	/*while(IRRunning){
+	while(IRRunning){
 		vTaskDelay(100);
 	}
 	if(IR.IRColorValue != IR_OFF && IR.on == 0){
@@ -68,12 +69,12 @@ void startIR(){
 		pwmIRStart();
 		oneShotSet(IR_9MS);
 		while(IRRunning){
-				vTaskDelay(100);
+			vTaskDelay(100);
 		}
 		IR.on = 1;
 	}
 	if(IR.IRColorValue == IR_OFF)
-		IR.on = 0;*/
+		IR.on = 0;
 	while(IRRunning){
 		vTaskDelay(100);
 	}

@@ -2,7 +2,7 @@
 
 simplelink/source/flowcont.obj: ../simplelink/source/flowcont.c
 simplelink/source/flowcont.obj: C:/ti/CC3100SDK_1.0.0/cc3100-sdk/simplelink/include/simplelink.h
-simplelink/source/flowcont.obj: C:/Users/Nick/workspace_v6_0/lumosembedded/simplelink/user.h
+simplelink/source/flowcont.obj: C:/Users/CCS/workspace_v6_0/lumosembedded/simplelink/user.h
 simplelink/source/flowcont.obj: c:/ti/ccsv6/tools/compiler/arm_5.1.6/include/string.h
 simplelink/source/flowcont.obj: c:/ti/ccsv6/tools/compiler/arm_5.1.6/include/linkage.h
 simplelink/source/flowcont.obj: C:/ti/CC3100SDK_1.0.0/cc3100-sdk/platform/tiva-c-launchpad/board.h
@@ -25,7 +25,7 @@ simplelink/source/flowcont.obj: ../simplelink/source/flowcont.h
 
 ../simplelink/source/flowcont.c: 
 C:/ti/CC3100SDK_1.0.0/cc3100-sdk/simplelink/include/simplelink.h: 
-C:/Users/Nick/workspace_v6_0/lumosembedded/simplelink/user.h: 
+C:/Users/CCS/workspace_v6_0/lumosembedded/simplelink/user.h: 
 c:/ti/ccsv6/tools/compiler/arm_5.1.6/include/string.h: 
 c:/ti/ccsv6/tools/compiler/arm_5.1.6/include/linkage.h: 
 C:/ti/CC3100SDK_1.0.0/cc3100-sdk/platform/tiva-c-launchpad/board.h: 

@@ -23,7 +23,7 @@
 
 /* IP addressed of server side socket. Should be in long format,
  * E.g: 0xc0a8010a == 192.168.1.10 */
-#define LIGHTS_IP_ADDR         0xc0a80102 //192.168.1.2
+#define LIGHTS_IP_ADDR         0xc0a80105 //192.168.1.5
 #define PORT_NUM        80            /* Port number to be used */
 
 #define BUF_SIZE        1400
@@ -138,6 +138,7 @@ extern relayData relay;
 extern IRDataStruct IR;
 extern volatile _u32 IRData;
 extern int IRRunning;
+extern int prefMode;
 
 
 #endif /* DEFINES_H_ */

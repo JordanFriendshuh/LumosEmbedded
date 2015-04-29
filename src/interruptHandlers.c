@@ -15,6 +15,7 @@ int encLeftCount;
 int encRightCount;
 int boolFlag = 1;
 int buttonBounce = 0;
+int prefMode = 0;
 
 void gpioHandle(void){
 	int i;
@@ -41,12 +42,27 @@ void gpioHandle(void){
 	}
 	if(HWREG(GPIO_PORTF_BASE + GPIO_O_RIS) & KNOB_PB){
     	if(!buttonBounce){
-    		for(i = 0; i < NUM_OF_LIGHTS; i++){
-    			lightsData[i].current = 0;
-    			if(lightsData[i].on  == 1)
-    				lightsData[i].on = 0;
-    			else
-    				lightsData[i].on = 1;
+    		switch(prefMode){
+				case 0:
+					relay.current = 0;
+					relay.on = !relay.on;
+					break;
+				case 1:
+					for(i = 0; i < NUM_OF_LIGHTS; i++){
+						lightsData[i].current = 0;
+						if(lightsData[i].on  == 1)
+							lightsData[i].on = 0;
+						else
+							lightsData[i].on = 1;
+					}
+					break;
+				case 2:
+					IR.current = 0;
+					if(IR.on)
+						IR.IRColorValue = IR_OFF;
+					else
+						IR.IRColorValue = IR_ON;
+					break;
     		}
     		buttonBounce = 1;
     		xSemaphoreGiveFromISR(updateLight_sem, 0);
@@ -59,11 +75,13 @@ void gpioHandle(void){
 
 void Timer0Handler()
 {
-	int i, mic_value;
+	int i, mic_value, motionValue;
 	static int mic_flag = 0;
 	static int mic_count = 0;
+	static int motValues[100];
 //	//comes in here every 1 ms
 	mic_value = GetADCval(1)/41 + 1;
+	motionValue = GetADCval(0);
 	if(buttonBounce){
 		buttonBounce++;
 		if(buttonBounce > 20){
@@ -74,11 +92,22 @@ void Timer0Handler()
 		if(encoderFlag == 50){
 			encoderFlag = 0;
 			boolFlag = 1;
-			for(i = 0; i < NUM_OF_LIGHTS; i++){
-				lightsData[i].current = 0;
-				lightsData[i].numChangeMode = 0;
-				//10's digit is the middle digit
-				lightsData[i].numChange += (ENC_SCALE * encRightCount) + (encLeftCount * (-ENC_SCALE));
+			switch(prefMode){
+				case 1:
+					for(i = 0; i < NUM_OF_LIGHTS; i++){
+						lightsData[i].current = 0;
+						lightsData[i].numChangeMode = 0;
+						//10's digit is the middle digit
+						lightsData[i].numChange += (ENC_SCALE * encRightCount) + (encLeftCount * (-ENC_SCALE));
+					}
+					break;
+				case 2:
+					IR.current = 0;
+					if(encRightCount > encLeftCount)
+						IR.IRColorValue = IR_BRIGHT;
+					else if(encRightCount < encLeftCount)
+						IR.IRColorValue = IR_DIM;
+					break;
 			}
 			encRightCount = 0;
 			encLeftCount = 0;
@@ -89,12 +118,26 @@ void Timer0Handler()
 	}
 	if(mic_flag == 0){
 		if(mic_value > 80){
-			for(i = 0; i < NUM_OF_LIGHTS; i++){
-				lightsData[i].current = 0;
-				if(lightsData[i].on)
-					lightsData[i].on = 0;
-				else
-					lightsData[i].on = 1;
+			switch(prefMode){
+				case 0:
+					relay.current = 0;
+					relay.on = !relay.on;
+					break;
+				case 1:
+					for(i = 0; i < NUM_OF_LIGHTS; i++){
+						lightsData[i].current = 0;
+						if(lightsData[i].on)
+							lightsData[i].on = 0;
+						else
+							lightsData[i].on = 1;
+					}
+				case 2:
+					IR.current = 0;
+					if(IR.on)
+						IR.IRColorValue = IR_OFF;
+					else
+						IR.IRColorValue = IR_ON;
+					break;
 			}
 	 	xSemaphoreGiveFromISR(updateLight_sem, 0);
 		mic_flag = 1;

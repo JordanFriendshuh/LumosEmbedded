@@ -481,7 +481,6 @@ int main(int argc, char** argv)
        These functions needs to be implemented in PAL */
     stopWDT();
     initClk();
-
     initializeTimer0(80000);
     initializeADC();
     initializeIRTimer();
@@ -558,7 +557,11 @@ int main(int argc, char** argv)
 		lightsData[i].numChangeMode = -1;
     }
     IR.current = 1;
+    IR.on = 0;
     relay.current = 1;
+    prefMode = 2;
+    IREnable = 1;
+    relayEnable = 0;
     vSemaphoreCreateBinary(updateLight_sem);
     vSemaphoreCreateBinary(networking_sem);
     xTaskCreate(updateLights, "Lights Manager", 1536, NULL, 2, NULL); //4096

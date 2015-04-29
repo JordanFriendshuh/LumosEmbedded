@@ -2,7 +2,7 @@
 
 spi/spi.obj: ../spi/spi.c
 spi/spi.obj: C:/ti/CC3100SDK_1.0.0/cc3100-sdk/simplelink/include/simplelink.h
-spi/spi.obj: C:/Users/Nick/workspace_v6_0/lumosembedded/simplelink/user.h
+spi/spi.obj: C:/Users/CCS/workspace_v6_0/lumosembedded/simplelink/user.h
 spi/spi.obj: c:/ti/ccsv6/tools/compiler/arm_5.1.6/include/string.h
 spi/spi.obj: c:/ti/ccsv6/tools/compiler/arm_5.1.6/include/linkage.h
 spi/spi.obj: C:/ti/CC3100SDK_1.0.0/cc3100-sdk/platform/tiva-c-launchpad/board.h
@@ -34,7 +34,7 @@ spi/spi.obj: C:/ti/TivaWare_C_Series-2.1.0.12573/driverlib/interrupt.h
 
 ../spi/spi.c: 
 C:/ti/CC3100SDK_1.0.0/cc3100-sdk/simplelink/include/simplelink.h: 
-C:/Users/Nick/workspace_v6_0/lumosembedded/simplelink/user.h: 
+C:/Users/CCS/workspace_v6_0/lumosembedded/simplelink/user.h: 
 c:/ti/ccsv6/tools/compiler/arm_5.1.6/include/string.h: 
 c:/ti/ccsv6/tools/compiler/arm_5.1.6/include/linkage.h: 
 C:/ti/CC3100SDK_1.0.0/cc3100-sdk/platform/tiva-c-launchpad/board.h: 

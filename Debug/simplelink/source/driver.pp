@@ -2,7 +2,7 @@
 
 simplelink/source/driver.obj: ../simplelink/source/driver.c
 simplelink/source/driver.obj: C:/ti/CC3100SDK_1.0.0/cc3100-sdk/simplelink/include/simplelink.h
-simplelink/source/driver.obj: C:/Users/Nick/workspace_v6_0/lumosembedded/simplelink/user.h
+simplelink/source/driver.obj: C:/Users/CCS/workspace_v6_0/lumosembedded/simplelink/user.h
 simplelink/source/driver.obj: c:/ti/ccsv6/tools/compiler/arm_5.1.6/include/string.h
 simplelink/source/driver.obj: c:/ti/ccsv6/tools/compiler/arm_5.1.6/include/linkage.h
 simplelink/source/driver.obj: C:/ti/CC3100SDK_1.0.0/cc3100-sdk/platform/tiva-c-launchpad/board.h
@@ -25,7 +25,7 @@ simplelink/source/driver.obj: ../simplelink/source/flowcont.h
 
 ../simplelink/source/driver.c: 
 C:/ti/CC3100SDK_1.0.0/cc3100-sdk/simplelink/include/simplelink.h: 
-C:/Users/Nick/workspace_v6_0/lumosembedded/simplelink/user.h: 
+C:/Users/CCS/workspace_v6_0/lumosembedded/simplelink/user.h: 
 c:/ti/ccsv6/tools/compiler/arm_5.1.6/include/string.h: 
 c:/ti/ccsv6/tools/compiler/arm_5.1.6/include/linkage.h: 
 C:/ti/CC3100SDK_1.0.0/cc3100-sdk/platform/tiva-c-launchpad/board.h: 

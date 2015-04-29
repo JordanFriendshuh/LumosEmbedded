@@ -68,6 +68,20 @@ void inputConvert(char * rawData){
 			}
 			i = i + 2;
 		}
+		if(rawData[i] == 'p'){
+			switch(rawData[i + 1]){
+				case 'r':
+					prefMode = 0;
+					break;
+				case 'h':
+					prefMode = 1;
+					break;
+				case 'i':
+					prefMode = 2;
+					break;
+			}
+			i = i + 2;
+		}
 		if(rawData[i] == 'e'){
 			switch(rawData[i + 1]){
 				case 'r':
